@@ -1,0 +1,54 @@
+#
+#
+record (concat, "CONCAT:T1") {
+    field (SCAN, "2 second")
+    field (MAXE, "20")
+    field (PREC, "2")
+    field (FTVL, "DOUBLE")
+
+    field (IN01, "SCALAR:ONE")
+    field (ME01, "4")
+
+    field (IN02, "SCALAR:TWO CA")
+    field (ME02, "5")
+
+    field (IN03, "3.33")
+
+    field (IN04, "WF:FOUR")
+    field (ME04, "7")
+
+    field (IN05, "SR11BCM01:CURRENT_MONITOR")
+
+    field (IN06, "SR11BCM01:CURRENT_MONITOR")
+    field (ME06, "2")
+
+    field (ME08, "10")
+}
+
+record (ai, "SCALAR:ONE") {
+    field (PINI, "YES")
+    field (VAL,  "1.11")
+    field (PREC, "2")
+}
+
+record (ai, "SCALAR:TWO") {
+    field (PINI, "YES")
+    field (VAL,  "2.22")
+    field (PREC, "2")
+}
+
+record (waveform, "WF:FOUR") {
+    field (PINI, "YES")
+    field (NELM, "5")
+    field (FTVL, "DOUBLE")
+    field (PREC, "2")
+}
+
+record (waveform, "WF:FIVE") {
+    field (PINI, "YES")
+    field (NELM, "5")
+    field (FTVL, "DOUBLE")
+    field (PREC, "2")
+}
+
+# end

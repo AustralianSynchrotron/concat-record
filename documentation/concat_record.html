@@ -1,0 +1,217 @@
+<!-- $File: //ASP/tec/epics/concat/trunk/documentation/concat_record.html $ -->
+<!-- $Revision: #1 $ -->
+<!-- $DateTime: 2016/01/07 16:32:58 $ -->
+<!-- Last checked in by: $Author: pozara $ -->
+<!-- -->
+<HTML>
+<HEAD>
+<TITLE>Concat record</TITLE>
+</HEAD>
+<BODY>
+
+<H1>Concat Record</H1>
+<H1> 1.  Introduction</H1>
+<HR>
+The concat record is used to perform concatination of scalar constants, scalar
+values retrieved from other records and array values retrieved from other
+records (such as from the compress, subArray and waveform records and also
+other concat records) into array an record.
+The result of this concatination can then be accessed by other records.<P>
+The fields of this record fall into these categories:<P>
+scan parameters<P>
+read parameters<P>
+operator display parameters<P>
+alarm parameters<P>
+monitor parameters<P>
+run-time parameters<P>
+
+<H1> 2.  Scan Parameters</H1>
+<HR>
+The Concat record has the standard fields for specifying under what circumstances
+the record will be processed. These fields are listed in
+<A HREF=https://wiki-ext.aps.anl.gov/epics/index.php/RRM_3-14_dbCommon#Scan_Fields><EM>1.2 Scan Fields</EM></A>.
+In addition, <A HREF=Recordref-5.html#MARKER-9-2><EM>Scanning Specification, Chapter 1, 1</EM></A>,
+explains how these fields are used.
+Since the Concat record supports no direct interfaces to hardware, it cannot
+be scanned on I/O interrupt, so its SCAN field cannot be <CODE>I/O Intr</CODE>.<P>
+
+<H1> 3.  Read Parameters</H1>
+<HR>
+The read parameters for the Concat record consist of upto 100 input links -- IN00, IN01, IN02, . . . IN99.
+The fields can be database links, channel access links, or scalar constants.
+If they are links, they must specify another record's field or a channel access link.
+If they are constants, they will be initialized with the value they are configured with.
+They cannot be hardware addresses.<P>
+See <A HREF=Recordref-5.html#MARKER-9-11><EM>Address Specification, Chapter 1, 2</EM></A>,
+for information on how to specify database links.<P>
+
+When an input link refers to an array, or multi-valued, record the expected size of the
+input is specified in the maximum elements fields ME00, ME01, ME02, . . . ME99.
+The default value for scalars and constants is 1, so this need not be specified for these.<P>
+
+The values retrieved from the input links are concatinated and places in an array referenced
+by VAL. (If the INP link is a constant, elements can be placed in the array via dbPuts.)
+NELM specifies the number of elements that the array will hold, while FTVL specifies the
+data type of the elements.<P>
+
+<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+
+<TD> &nbsp; NELM &nbsp; <TD> &nbsp; Number of Elements in array &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>Yes<TD>1<TD>Yes<TD>No<TD>No<TD>No<TR>
+<TD> &nbsp; FTVL &nbsp; <TD> &nbsp; Field Type of Value&nbsp; <TD><A HREF=Recordref-44.html#MARKER-9-1>GBLCHOICE</A><TD>Yes<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+
+<TD> &nbsp; IN00 &nbsp; <TD> &nbsp; Input Link 0    &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; IN01 &nbsp; <TD> &nbsp; Input Link 1    &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; INxx &nbsp; <TD> &nbsp; Input Link xx   &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; IN99 &nbsp; <TD> &nbsp; Input Link 99   &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+
+<TD> &nbsp; ME00 &nbsp; <TD> &nbsp; Max Elements 0  &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; ME01 &nbsp; <TD> &nbsp; Max Elements 1  &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; MExx &nbsp; <TD> &nbsp; Max Elements xx &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<TD> &nbsp; ME99 &nbsp; <TD> &nbsp; Max Elements 99 &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+
+</TABLE>
+
+<P>
+<H1> 4.  Operator Display Parameters</H1>
+<HR>
+These parameters are used to present meaningful data to the operator. These fields
+are used to display VAL and the other parameters of the concat record either
+textually or graphically.<P>
+
+The EGU field contains a string of up to 16 characters which is supplied by the
+user and which describes the values being operated upon. The string is retrieved
+whenever the routine <CODE>get_units</CODE> is called.
+The EGU string is solely for an operator's sake and does not have to be used.<P>
+
+The HOPR and LOPR fields only refer to the limits of the VAL fiels.
+PREC controls the precision of the VAL field.
+These fiels are only appliciable when FTVL specifed a numeric type.<P>
+See <A HREF=Recordref-6.html#MARKER-9-1>Chapter 2, <EM>Fields Common to All Record Types</EM></A>,
+for more on the record name (NAME) and description (DESC) fields. <P>
+
+<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+<TD> &nbsp; EGU &nbsp;  <TD> &nbsp; Engineering Units &nbsp;    <TD>STRING [16]<TD>Yes<TD>Null<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+
+<TD> &nbsp; PREC &nbsp; <TD> &nbsp; Display Precision &nbsp;    <TD>SHORT<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+<TD> &nbsp; HOPR &nbsp; <TD> &nbsp; High Operating Range &nbsp; <TD>DOUBLE<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+
+<TD> &nbsp; LOPR &nbsp; <TD> &nbsp; Low Operating Range &nbsp;  <TD>DOUBLE<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+<TD> &nbsp; NAME &nbsp; <TD> &nbsp; Record Name &nbsp;          <TD>STRING [29]<TD>Yes<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+
+<TD> &nbsp; DESC &nbsp; <TD> &nbsp; Description &nbsp;          <TD>STRING [29]<TD>Yes<TD>Null<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+</TABLE>
+
+<P>
+<H1> 5.  Alarm Parameters</H1>
+<HR>
+The concat record has the alarm parameters common to all record types. <A HREF=Recordref-6.html#MARKER-9-3>
+<EM>Alarm Fields, Chapter 2, 3</EM></A>, lists other fields related to a alarms that are common to all
+record types.<P>
+
+<P>
+<H1> 6.  Monitor Parameters</H1>
+<HR>
+These parameters are used to determine when to send monitors for the value fields.
+The monitors are sent when the any element of the value field exceeds the last monitored
+field by the appropriate deadband, the ADEL for archiver monitors and the MDEL field for
+all other types of monitors. If these fields have a value of zero, everytime the value changes,
+monitors are triggered; if they have a value of -1, everytime the record is scanned,
+monitors are triggered. See <A HREF=Recordref-5.html#MARKER-9-15><EM>Monitor Specification, Chapter 1, 5</EM></A>,
+for a complete explanation of monitors.<P>
+
+<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+<TD> &nbsp; ADEL &nbsp; <TD> &nbsp; Archive Deadband &nbsp; <TD> &nbsp; DOUBLE &nbsp; <TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+<TD> &nbsp; MDEL &nbsp; <TD> &nbsp; Monitor Deadband &nbsp; <TD> &nbsp; DOUBLE &nbsp; <TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+</TABLE>
+
+<P>
+<H1> 7.  Run-time Parameters</H1>
+<HR>
+
+VAL references the array where the cancat record stores its data.<P>
+The NORD field holds a counter of the number of elements that have been read into the array.<P>
+
+The NIEM and RIEM fields control how the concat record deals with missing inputs and/or
+when inputs have less than the expected number of elements. When padding is used to fill
+"missing" elements, the DFNV or DFSV field provide the default value.<P>
+
+The concatination process uses the values retrieved from the IN<EM>xx</EM> links.
+These values retrieved from the input links are stored in the V01, V02, ... V60 fields.
+For instance, the value obtained from the IN01 link is stored in the field V01, and
+the value obtained from INP02 is stored in field V02 etc. etc.
+The actual number of elements retrieved from IN01 in stored in the field NE01, and so on.<P>
+
+<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+
+<TD> &nbsp; VAL &nbsp;  <TD> &nbsp; Value Field &nbsp;                 <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; NORD &nbsp; <TD> &nbsp; Number of Elements Read &nbsp;     <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+
+<TD> &nbsp; NIEM &nbsp; <TD> &nbsp; No input error handling &nbsp;     <TD> &nbsp; Fail, Skip, Pad &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+<TD> &nbsp; RIEM &nbsp; <TD> &nbsp; Reduced input error hadling &nbsp; <TD> &nbsp; Fail, Skip, Pad &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+<TD> &nbsp; DFNV &nbsp; <TD> &nbsp; Default pad numeric value &nbsp;   <TD> &nbsp; DOUBLE &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+<TD> &nbsp; DFSV &nbsp; <TD> &nbsp; Dufault pad string value &nbsp;    <TD> &nbsp; STRING &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+
+<TD> &nbsp; V00  &nbsp; <TD> &nbsp; Input Value 0      &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; V01  &nbsp; <TD> &nbsp; Input Value 1      &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; Vxx  &nbsp; <TD> &nbsp; Input Value xx     &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; V99  &nbsp; <TD> &nbsp; Input Value 99     &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+
+<!-- <TD> &nbsp; NE00 &nbsp; <TD> &nbsp; Number Elements 0  &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR> -->
+<TD> &nbsp; NE01 &nbsp; <TD> &nbsp; Number Elements 1  &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; NExx &nbsp; <TD> &nbsp; Number Elements xx &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<TD> &nbsp; NE99 &nbsp; <TD> &nbsp; Number Elements 99 &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+
+
+</TABLE>
+
+<P>
+<H1> 8.  Record Support Routines</H1>
+<HR>
+<H3> init_record</H3>
+For each constant input link, the corresponding value field is initialized with the constant value if
+the input link is CONSTANT or a channel access link is created if the input link is PV_LINK.<P>
+
+<H3> process</H3>
+See next section.<P>
+
+<H3> special</H3>
+TBD<P>
+
+<H3> get_value</H3>
+Fills in the values of struct valueDes so that they refer to VAL.<P>
+
+<H3> get_units</H3>
+Retrieves EGU.<P>
+
+<H3> get_precision</H3>
+Retrieves PREC.<P>
+
+<H3> get_graphic_double</H3>
+Sets the upper display and lower display limits for a field. If the field is VAL, V01 .. V060, the
+limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
+used, else the upper and lower maximum values for the field type will be used.<P>
+
+<H3> get_control_double</H3>
+Sets the upper control and the lower control limits for a field. If the field is VAL, V01 .. V60, the
+limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
+used, else the upper and lower maximum values for the field type will be used.<P>
+
+<H1> 9.  Record Processing</H1>
+<HR>
+Routine process implements the following algorithm:<P>
+<DL>
+<DT><DD> 1.  Fetch all arguments. Pad inputs with default values if required as per the NIEM and RIEM fields<P>
+<DT><DD> 2.  Call routine do_concat routine which concatinates all inputs into the VAL field.<P>
+
+<DT><DD> 3.  Check to see if monitors should be invoked.<P>
+<UL>
+<LI>Alarm monitors are invoked if the alarm status or severity has changed.<P>
+<LI>Archive and value change monitors are invoked if ADEL and MDEL conditions are met.<P>
+<LI>Monitors for V00 ... V99 and NE00 ... NE99 are checked whenever other monitors are invoked.<P>
+</UL>
+<DT><DD> 4.  Scan forward link if necessary, set PACT FALSE, and return.<P>
+</DL>
+<P>
+
+<HR>
+</BODY>

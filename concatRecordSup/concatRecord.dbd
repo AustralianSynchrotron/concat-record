@@ -1,0 +1,3053 @@
+# $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.dbd $
+# $Revision: #1 $
+# $DateTime: 2016/01/07 16:32:58 $
+# Last checked in by: $Author: pozara $
+#
+# Description
+# Concat record dbd definition.
+#
+
+# Action taken if/when input links are missing.
+#
+menu (concatMODE) {
+    choice (concatMODE_Fail, "Fail")
+    choice (concatMODE_Skip, "Skip")
+    choice (concatMODE_Pad, "Pad")
+}
+
+recordtype (concat) {
+
+    include "dbCommon.dbd"
+
+    field (VAL,  DBF_NOACCESS) {
+        prompt ("Value")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        pp (TRUE) extra ("void * val")
+    }
+
+    field (VERS, DBF_DOUBLE) {
+        prompt ("Code Version")
+        special (SPC_NOMOD)
+        initial ("0")
+    }
+
+    field (RPVT, DBF_NOACCESS) {
+        prompt ("Record Private")
+        special (SPC_NOMOD)
+        interest (4) extra ("void *rpvt")
+    }
+
+    field (FTVL, DBF_MENU) {
+        prompt ("Field Type of Value")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        menu (menuFtype)
+    }
+
+    field (NELM, DBF_ULONG) {
+        prompt ("Number of Elements")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("1")
+    }
+
+    field (NORD, DBF_ULONG) {
+        prompt ("Number of elements read")
+        special (SPC_NOMOD)
+    }
+
+    field (PREC, DBF_SHORT) {
+        prompt ("Display Precision")
+        promptgroup (GUI_DISPLAY)
+        interest (1)
+    }
+
+    field (EGU,  DBF_STRING) {
+        prompt ("Engineering Units Name")
+        promptgroup (GUI_DISPLAY)
+        interest (1) size (16)
+    }
+
+    field (HOPR, DBF_DOUBLE) {
+        prompt ("High Operating Range")
+        promptgroup (GUI_DISPLAY)
+        interest (1)
+    }
+
+    field (LOPR, DBF_DOUBLE) {
+        prompt ("Low Operating Range")
+        promptgroup (GUI_DISPLAY)
+        interest (1)
+    }
+
+    # ADEL/MDEL applies to VAL field and Vxx fields
+    #
+    field (ADEL, DBF_DOUBLE) {
+        prompt ("Archive Deadband")
+        promptgroup (GUI_DISPLAY)
+        interest (1)
+    }
+
+    field (MDEL, DBF_DOUBLE) {
+        prompt ("Monitor Deadband")
+        promptgroup (GUI_DISPLAY)
+        interest (1)
+    }
+
+    # Error mode flags.
+    #
+    # Controls behaviour if/when input unavailable.
+    #
+    field (NIEM, DBF_MENU) {
+        prompt ("No Input Error Mode")
+        promptgroup (GUI_SCAN)
+        menu (concatMODE)
+        interest (2)
+        initial ("Fail")
+        pp (TRUE)
+    }
+
+    # Controls behaviour if/when NExx < MExx
+    #
+    field (RIEM, DBF_MENU) {
+        prompt ("Reduced Input Error Mode")
+        promptgroup (GUI_SCAN)
+        menu (concatMODE)
+        interest (2)
+        initial ("Skip")
+        pp (TRUE)
+    }
+
+    # These provide the default numeric and string values, used as appropriate,
+    # when padding is used.
+    #
+    field (DFNV, DBF_DOUBLE) {
+        prompt ("Default Numeric Value")
+        promptgroup (GUI_DISPLAY)
+        initial ("0.0")
+        interest (2)
+        pp (TRUE)
+    }
+
+    field (DFSV, DBF_STRING) {
+        prompt ("Default String Value")
+        promptgroup (GUI_DISPLAY)
+        initial (" ")
+        interest (2) size (40)
+        pp (TRUE)
+    }
+
+    # IN00 through IN99 must be contiguous
+    #
+    field (IN00, DBF_INLINK) {
+        prompt ("Input link 00")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN01, DBF_INLINK) {
+        prompt ("Input link 01")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN02, DBF_INLINK) {
+        prompt ("Input link 02")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN03, DBF_INLINK) {
+        prompt ("Input link 03")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN04, DBF_INLINK) {
+        prompt ("Input link 04")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN05, DBF_INLINK) {
+        prompt ("Input link 05")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN06, DBF_INLINK) {
+        prompt ("Input link 06")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN07, DBF_INLINK) {
+        prompt ("Input link 07")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN08, DBF_INLINK) {
+        prompt ("Input link 08")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN09, DBF_INLINK) {
+        prompt ("Input link 09")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN10, DBF_INLINK) {
+        prompt ("Input link 10")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN11, DBF_INLINK) {
+        prompt ("Input link 11")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN12, DBF_INLINK) {
+        prompt ("Input link 12")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN13, DBF_INLINK) {
+        prompt ("Input link 13")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN14, DBF_INLINK) {
+        prompt ("Input link 14")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN15, DBF_INLINK) {
+        prompt ("Input link 15")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN16, DBF_INLINK) {
+        prompt ("Input link 16")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN17, DBF_INLINK) {
+        prompt ("Input link 17")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN18, DBF_INLINK) {
+        prompt ("Input link 18")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN19, DBF_INLINK) {
+        prompt ("Input link 19")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN20, DBF_INLINK) {
+        prompt ("Input link 20")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN21, DBF_INLINK) {
+        prompt ("Input link 21")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN22, DBF_INLINK) {
+        prompt ("Input link 22")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN23, DBF_INLINK) {
+        prompt ("Input link 23")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN24, DBF_INLINK) {
+        prompt ("Input link 24")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN25, DBF_INLINK) {
+        prompt ("Input link 25")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN26, DBF_INLINK) {
+        prompt ("Input link 26")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN27, DBF_INLINK) {
+        prompt ("Input link 27")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN28, DBF_INLINK) {
+        prompt ("Input link 28")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN29, DBF_INLINK) {
+        prompt ("Input link 29")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN30, DBF_INLINK) {
+        prompt ("Input link 30")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN31, DBF_INLINK) {
+        prompt ("Input link 31")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN32, DBF_INLINK) {
+        prompt ("Input link 32")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN33, DBF_INLINK) {
+        prompt ("Input link 33")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN34, DBF_INLINK) {
+        prompt ("Input link 34")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN35, DBF_INLINK) {
+        prompt ("Input link 35")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN36, DBF_INLINK) {
+        prompt ("Input link 36")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN37, DBF_INLINK) {
+        prompt ("Input link 37")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN38, DBF_INLINK) {
+        prompt ("Input link 38")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN39, DBF_INLINK) {
+        prompt ("Input link 39")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN40, DBF_INLINK) {
+        prompt ("Input link 40")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN41, DBF_INLINK) {
+        prompt ("Input link 41")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN42, DBF_INLINK) {
+        prompt ("Input link 42")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN43, DBF_INLINK) {
+        prompt ("Input link 43")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN44, DBF_INLINK) {
+        prompt ("Input link 44")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN45, DBF_INLINK) {
+        prompt ("Input link 45")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN46, DBF_INLINK) {
+        prompt ("Input link 46")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN47, DBF_INLINK) {
+        prompt ("Input link 47")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN48, DBF_INLINK) {
+        prompt ("Input link 48")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN49, DBF_INLINK) {
+        prompt ("Input link 49")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN50, DBF_INLINK) {
+        prompt ("Input link 50")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN51, DBF_INLINK) {
+        prompt ("Input link 51")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN52, DBF_INLINK) {
+        prompt ("Input link 52")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN53, DBF_INLINK) {
+        prompt ("Input link 53")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN54, DBF_INLINK) {
+        prompt ("Input link 54")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN55, DBF_INLINK) {
+        prompt ("Input link 55")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN56, DBF_INLINK) {
+        prompt ("Input link 56")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN57, DBF_INLINK) {
+        prompt ("Input link 57")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN58, DBF_INLINK) {
+        prompt ("Input link 58")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN59, DBF_INLINK) {
+        prompt ("Input link 59")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN60, DBF_INLINK) {
+        prompt ("Input link 60")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN61, DBF_INLINK) {
+        prompt ("Input link 61")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN62, DBF_INLINK) {
+        prompt ("Input link 62")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN63, DBF_INLINK) {
+        prompt ("Input link 63")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN64, DBF_INLINK) {
+        prompt ("Input link 64")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN65, DBF_INLINK) {
+        prompt ("Input link 65")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN66, DBF_INLINK) {
+        prompt ("Input link 66")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN67, DBF_INLINK) {
+        prompt ("Input link 67")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN68, DBF_INLINK) {
+        prompt ("Input link 68")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN69, DBF_INLINK) {
+        prompt ("Input link 69")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN70, DBF_INLINK) {
+        prompt ("Input link 70")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN71, DBF_INLINK) {
+        prompt ("Input link 71")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN72, DBF_INLINK) {
+        prompt ("Input link 72")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN73, DBF_INLINK) {
+        prompt ("Input link 73")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN74, DBF_INLINK) {
+        prompt ("Input link 74")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN75, DBF_INLINK) {
+        prompt ("Input link 75")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN76, DBF_INLINK) {
+        prompt ("Input link 76")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN77, DBF_INLINK) {
+        prompt ("Input link 77")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN78, DBF_INLINK) {
+        prompt ("Input link 78")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN79, DBF_INLINK) {
+        prompt ("Input link 79")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN80, DBF_INLINK) {
+        prompt ("Input link 80")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN81, DBF_INLINK) {
+        prompt ("Input link 81")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN82, DBF_INLINK) {
+        prompt ("Input link 82")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN83, DBF_INLINK) {
+        prompt ("Input link 83")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN84, DBF_INLINK) {
+        prompt ("Input link 84")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN85, DBF_INLINK) {
+        prompt ("Input link 85")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN86, DBF_INLINK) {
+        prompt ("Input link 86")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN87, DBF_INLINK) {
+        prompt ("Input link 87")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN88, DBF_INLINK) {
+        prompt ("Input link 88")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN89, DBF_INLINK) {
+        prompt ("Input link 89")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN90, DBF_INLINK) {
+        prompt ("Input link 90")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN91, DBF_INLINK) {
+        prompt ("Input link 91")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN92, DBF_INLINK) {
+        prompt ("Input link 92")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN93, DBF_INLINK) {
+        prompt ("Input link 93")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN94, DBF_INLINK) {
+        prompt ("Input link 94")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN95, DBF_INLINK) {
+        prompt ("Input link 95")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN96, DBF_INLINK) {
+        prompt ("Input link 96")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN97, DBF_INLINK) {
+        prompt ("Input link 97")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN98, DBF_INLINK) {
+        prompt ("Input link 98")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    field (IN99, DBF_INLINK) {
+        prompt ("Input link 99")
+        promptgroup (GUI_INPUTS)
+        interest (1)
+    }
+
+    # ME00 through ME99 must be contiguous
+    #
+    field (ME00, DBF_ULONG) {
+        prompt ("Max. elements in 00")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME01, DBF_ULONG) {
+        prompt ("Max. elements in 01")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME02, DBF_ULONG) {
+        prompt ("Max. elements in 02")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME03, DBF_ULONG) {
+        prompt ("Max. elements in 03")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME04, DBF_ULONG) {
+        prompt ("Max. elements in 04")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME05, DBF_ULONG) {
+        prompt ("Max. elements in 05")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME06, DBF_ULONG) {
+        prompt ("Max. elements in 06")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME07, DBF_ULONG) {
+        prompt ("Max. elements in 07")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME08, DBF_ULONG) {
+        prompt ("Max. elements in 08")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME09, DBF_ULONG) {
+        prompt ("Max. elements in 09")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME10, DBF_ULONG) {
+        prompt ("Max. elements in 10")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME11, DBF_ULONG) {
+        prompt ("Max. elements in 11")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME12, DBF_ULONG) {
+        prompt ("Max. elements in 12")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME13, DBF_ULONG) {
+        prompt ("Max. elements in 13")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME14, DBF_ULONG) {
+        prompt ("Max. elements in 14")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME15, DBF_ULONG) {
+        prompt ("Max. elements in 15")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME16, DBF_ULONG) {
+        prompt ("Max. elements in 16")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME17, DBF_ULONG) {
+        prompt ("Max. elements in 17")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME18, DBF_ULONG) {
+        prompt ("Max. elements in 18")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME19, DBF_ULONG) {
+        prompt ("Max. elements in 19")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME20, DBF_ULONG) {
+        prompt ("Max. elements in 20")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME21, DBF_ULONG) {
+        prompt ("Max. elements in 21")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME22, DBF_ULONG) {
+        prompt ("Max. elements in 22")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME23, DBF_ULONG) {
+        prompt ("Max. elements in 23")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME24, DBF_ULONG) {
+        prompt ("Max. elements in 24")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME25, DBF_ULONG) {
+        prompt ("Max. elements in 25")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME26, DBF_ULONG) {
+        prompt ("Max. elements in 26")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME27, DBF_ULONG) {
+        prompt ("Max. elements in 27")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME28, DBF_ULONG) {
+        prompt ("Max. elements in 28")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME29, DBF_ULONG) {
+        prompt ("Max. elements in 29")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME30, DBF_ULONG) {
+        prompt ("Max. elements in 30")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME31, DBF_ULONG) {
+        prompt ("Max. elements in 31")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME32, DBF_ULONG) {
+        prompt ("Max. elements in 32")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME33, DBF_ULONG) {
+        prompt ("Max. elements in 33")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME34, DBF_ULONG) {
+        prompt ("Max. elements in 34")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME35, DBF_ULONG) {
+        prompt ("Max. elements in 35")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME36, DBF_ULONG) {
+        prompt ("Max. elements in 36")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME37, DBF_ULONG) {
+        prompt ("Max. elements in 37")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME38, DBF_ULONG) {
+        prompt ("Max. elements in 38")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME39, DBF_ULONG) {
+        prompt ("Max. elements in 39")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME40, DBF_ULONG) {
+        prompt ("Max. elements in 40")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME41, DBF_ULONG) {
+        prompt ("Max. elements in 41")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME42, DBF_ULONG) {
+        prompt ("Max. elements in 42")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME43, DBF_ULONG) {
+        prompt ("Max. elements in 43")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME44, DBF_ULONG) {
+        prompt ("Max. elements in 44")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME45, DBF_ULONG) {
+        prompt ("Max. elements in 45")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME46, DBF_ULONG) {
+        prompt ("Max. elements in 46")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME47, DBF_ULONG) {
+        prompt ("Max. elements in 47")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME48, DBF_ULONG) {
+        prompt ("Max. elements in 48")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME49, DBF_ULONG) {
+        prompt ("Max. elements in 49")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME50, DBF_ULONG) {
+        prompt ("Max. elements in 50")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME51, DBF_ULONG) {
+        prompt ("Max. elements in 51")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME52, DBF_ULONG) {
+        prompt ("Max. elements in 52")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME53, DBF_ULONG) {
+        prompt ("Max. elements in 53")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME54, DBF_ULONG) {
+        prompt ("Max. elements in 54")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME55, DBF_ULONG) {
+        prompt ("Max. elements in 55")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME56, DBF_ULONG) {
+        prompt ("Max. elements in 56")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME57, DBF_ULONG) {
+        prompt ("Max. elements in 57")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME58, DBF_ULONG) {
+        prompt ("Max. elements in 58")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME59, DBF_ULONG) {
+        prompt ("Max. elements in 59")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME60, DBF_ULONG) {
+        prompt ("Max. elements in 60")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME61, DBF_ULONG) {
+        prompt ("Max. elements in 61")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME62, DBF_ULONG) {
+        prompt ("Max. elements in 62")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME63, DBF_ULONG) {
+        prompt ("Max. elements in 63")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME64, DBF_ULONG) {
+        prompt ("Max. elements in 64")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME65, DBF_ULONG) {
+        prompt ("Max. elements in 65")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME66, DBF_ULONG) {
+        prompt ("Max. elements in 66")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME67, DBF_ULONG) {
+        prompt ("Max. elements in 67")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME68, DBF_ULONG) {
+        prompt ("Max. elements in 68")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME69, DBF_ULONG) {
+        prompt ("Max. elements in 69")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME70, DBF_ULONG) {
+        prompt ("Max. elements in 70")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME71, DBF_ULONG) {
+        prompt ("Max. elements in 71")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME72, DBF_ULONG) {
+        prompt ("Max. elements in 72")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME73, DBF_ULONG) {
+        prompt ("Max. elements in 73")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME74, DBF_ULONG) {
+        prompt ("Max. elements in 74")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME75, DBF_ULONG) {
+        prompt ("Max. elements in 75")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME76, DBF_ULONG) {
+        prompt ("Max. elements in 76")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME77, DBF_ULONG) {
+        prompt ("Max. elements in 77")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME78, DBF_ULONG) {
+        prompt ("Max. elements in 78")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME79, DBF_ULONG) {
+        prompt ("Max. elements in 79")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME80, DBF_ULONG) {
+        prompt ("Max. elements in 80")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME81, DBF_ULONG) {
+        prompt ("Max. elements in 81")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME82, DBF_ULONG) {
+        prompt ("Max. elements in 82")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME83, DBF_ULONG) {
+        prompt ("Max. elements in 83")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME84, DBF_ULONG) {
+        prompt ("Max. elements in 84")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME85, DBF_ULONG) {
+        prompt ("Max. elements in 85")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME86, DBF_ULONG) {
+        prompt ("Max. elements in 86")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME87, DBF_ULONG) {
+        prompt ("Max. elements in 87")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME88, DBF_ULONG) {
+        prompt ("Max. elements in 88")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME89, DBF_ULONG) {
+        prompt ("Max. elements in 89")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME90, DBF_ULONG) {
+        prompt ("Max. elements in 90")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME91, DBF_ULONG) {
+        prompt ("Max. elements in 91")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME92, DBF_ULONG) {
+        prompt ("Max. elements in 92")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME93, DBF_ULONG) {
+        prompt ("Max. elements in 93")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME94, DBF_ULONG) {
+        prompt ("Max. elements in 94")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME95, DBF_ULONG) {
+        prompt ("Max. elements in 95")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME96, DBF_ULONG) {
+        prompt ("Max. elements in 96")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME97, DBF_ULONG) {
+        prompt ("Max. elements in 97")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME98, DBF_ULONG) {
+        prompt ("Max. elements in 98")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    field (ME99, DBF_ULONG) {
+        prompt ("Max. elements in 99")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (1)
+        initial ("0")
+    }
+
+    # NE00 through NE99 must be contiguous
+    #
+    field (NE00, DBF_ULONG) {
+        prompt ("Num. elememts in 00")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE01, DBF_ULONG) {
+        prompt ("Num. elememts in 01")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE02, DBF_ULONG) {
+        prompt ("Num. elememts in 02")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE03, DBF_ULONG) {
+        prompt ("Num. elememts in 03")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE04, DBF_ULONG) {
+        prompt ("Num. elememts in 04")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE05, DBF_ULONG) {
+        prompt ("Num. elememts in 05")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE06, DBF_ULONG) {
+        prompt ("Num. elememts in 06")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE07, DBF_ULONG) {
+        prompt ("Num. elememts in 07")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE08, DBF_ULONG) {
+        prompt ("Num. elememts in 08")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE09, DBF_ULONG) {
+        prompt ("Num. elememts in 09")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE10, DBF_ULONG) {
+        prompt ("Num. elememts in 10")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE11, DBF_ULONG) {
+        prompt ("Num. elememts in 11")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE12, DBF_ULONG) {
+        prompt ("Num. elememts in 12")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE13, DBF_ULONG) {
+        prompt ("Num. elememts in 13")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE14, DBF_ULONG) {
+        prompt ("Num. elememts in 14")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE15, DBF_ULONG) {
+        prompt ("Num. elememts in 15")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE16, DBF_ULONG) {
+        prompt ("Num. elememts in 16")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE17, DBF_ULONG) {
+        prompt ("Num. elememts in 17")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE18, DBF_ULONG) {
+        prompt ("Num. elememts in 18")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE19, DBF_ULONG) {
+        prompt ("Num. elememts in 19")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE20, DBF_ULONG) {
+        prompt ("Num. elememts in 20")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE21, DBF_ULONG) {
+        prompt ("Num. elememts in 21")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE22, DBF_ULONG) {
+        prompt ("Num. elememts in 22")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE23, DBF_ULONG) {
+        prompt ("Num. elememts in 23")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE24, DBF_ULONG) {
+        prompt ("Num. elememts in 24")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE25, DBF_ULONG) {
+        prompt ("Num. elememts in 25")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE26, DBF_ULONG) {
+        prompt ("Num. elememts in 26")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE27, DBF_ULONG) {
+        prompt ("Num. elememts in 27")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE28, DBF_ULONG) {
+        prompt ("Num. elememts in 28")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE29, DBF_ULONG) {
+        prompt ("Num. elememts in 29")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE30, DBF_ULONG) {
+        prompt ("Num. elememts in 30")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE31, DBF_ULONG) {
+        prompt ("Num. elememts in 31")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE32, DBF_ULONG) {
+        prompt ("Num. elememts in 32")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE33, DBF_ULONG) {
+        prompt ("Num. elememts in 33")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE34, DBF_ULONG) {
+        prompt ("Num. elememts in 34")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE35, DBF_ULONG) {
+        prompt ("Num. elememts in 35")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE36, DBF_ULONG) {
+        prompt ("Num. elememts in 36")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE37, DBF_ULONG) {
+        prompt ("Num. elememts in 37")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE38, DBF_ULONG) {
+        prompt ("Num. elememts in 38")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE39, DBF_ULONG) {
+        prompt ("Num. elememts in 39")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE40, DBF_ULONG) {
+        prompt ("Num. elememts in 40")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE41, DBF_ULONG) {
+        prompt ("Num. elememts in 41")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE42, DBF_ULONG) {
+        prompt ("Num. elememts in 42")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE43, DBF_ULONG) {
+        prompt ("Num. elememts in 43")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE44, DBF_ULONG) {
+        prompt ("Num. elememts in 44")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE45, DBF_ULONG) {
+        prompt ("Num. elememts in 45")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE46, DBF_ULONG) {
+        prompt ("Num. elememts in 46")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE47, DBF_ULONG) {
+        prompt ("Num. elememts in 47")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE48, DBF_ULONG) {
+        prompt ("Num. elememts in 48")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE49, DBF_ULONG) {
+        prompt ("Num. elememts in 49")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE50, DBF_ULONG) {
+        prompt ("Num. elememts in 50")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE51, DBF_ULONG) {
+        prompt ("Num. elememts in 51")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE52, DBF_ULONG) {
+        prompt ("Num. elememts in 52")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE53, DBF_ULONG) {
+        prompt ("Num. elememts in 53")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE54, DBF_ULONG) {
+        prompt ("Num. elememts in 54")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE55, DBF_ULONG) {
+        prompt ("Num. elememts in 55")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE56, DBF_ULONG) {
+        prompt ("Num. elememts in 56")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE57, DBF_ULONG) {
+        prompt ("Num. elememts in 57")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE58, DBF_ULONG) {
+        prompt ("Num. elememts in 58")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE59, DBF_ULONG) {
+        prompt ("Num. elememts in 59")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE60, DBF_ULONG) {
+        prompt ("Num. elememts in 60")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE61, DBF_ULONG) {
+        prompt ("Num. elememts in 61")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE62, DBF_ULONG) {
+        prompt ("Num. elememts in 62")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE63, DBF_ULONG) {
+        prompt ("Num. elememts in 63")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE64, DBF_ULONG) {
+        prompt ("Num. elememts in 64")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE65, DBF_ULONG) {
+        prompt ("Num. elememts in 65")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE66, DBF_ULONG) {
+        prompt ("Num. elememts in 66")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE67, DBF_ULONG) {
+        prompt ("Num. elememts in 67")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE68, DBF_ULONG) {
+        prompt ("Num. elememts in 68")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE69, DBF_ULONG) {
+        prompt ("Num. elememts in 69")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE70, DBF_ULONG) {
+        prompt ("Num. elememts in 70")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE71, DBF_ULONG) {
+        prompt ("Num. elememts in 71")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE72, DBF_ULONG) {
+        prompt ("Num. elememts in 72")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE73, DBF_ULONG) {
+        prompt ("Num. elememts in 73")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE74, DBF_ULONG) {
+        prompt ("Num. elememts in 74")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE75, DBF_ULONG) {
+        prompt ("Num. elememts in 75")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE76, DBF_ULONG) {
+        prompt ("Num. elememts in 76")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE77, DBF_ULONG) {
+        prompt ("Num. elememts in 77")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE78, DBF_ULONG) {
+        prompt ("Num. elememts in 78")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE79, DBF_ULONG) {
+        prompt ("Num. elememts in 79")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE80, DBF_ULONG) {
+        prompt ("Num. elememts in 80")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE81, DBF_ULONG) {
+        prompt ("Num. elememts in 81")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE82, DBF_ULONG) {
+        prompt ("Num. elememts in 82")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE83, DBF_ULONG) {
+        prompt ("Num. elememts in 83")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE84, DBF_ULONG) {
+        prompt ("Num. elememts in 84")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE85, DBF_ULONG) {
+        prompt ("Num. elememts in 85")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE86, DBF_ULONG) {
+        prompt ("Num. elememts in 86")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE87, DBF_ULONG) {
+        prompt ("Num. elememts in 87")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE88, DBF_ULONG) {
+        prompt ("Num. elememts in 88")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE89, DBF_ULONG) {
+        prompt ("Num. elememts in 89")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE90, DBF_ULONG) {
+        prompt ("Num. elememts in 90")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE91, DBF_ULONG) {
+        prompt ("Num. elememts in 91")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE92, DBF_ULONG) {
+        prompt ("Num. elememts in 92")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE93, DBF_ULONG) {
+        prompt ("Num. elememts in 93")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE94, DBF_ULONG) {
+        prompt ("Num. elememts in 94")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE95, DBF_ULONG) {
+        prompt ("Num. elememts in 95")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE96, DBF_ULONG) {
+        prompt ("Num. elememts in 96")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE97, DBF_ULONG) {
+        prompt ("Num. elememts in 97")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE98, DBF_ULONG) {
+        prompt ("Num. elememts in 98")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    field (NE99, DBF_ULONG) {
+        prompt ("Num. elememts in 99")
+        promptgroup (GUI_WAVE)
+        special (SPC_NOMOD)
+        interest (3)
+        initial ("0")
+    }
+
+    # V00 through V99 must be contiguous
+    #
+    field (V00,  DBF_NOACCESS) {
+        prompt ("Input value 00")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v00")
+    }
+
+    field (V01,  DBF_NOACCESS) {
+        prompt ("Input value 01")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v01")
+    }
+
+    field (V02,  DBF_NOACCESS) {
+        prompt ("Input value 02")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v02")
+    }
+
+    field (V03,  DBF_NOACCESS) {
+        prompt ("Input value 03")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v03")
+    }
+
+    field (V04,  DBF_NOACCESS) {
+        prompt ("Input value 04")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v04")
+    }
+
+    field (V05,  DBF_NOACCESS) {
+        prompt ("Input value 05")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v05")
+    }
+
+    field (V06,  DBF_NOACCESS) {
+        prompt ("Input value 06")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v06")
+    }
+
+    field (V07,  DBF_NOACCESS) {
+        prompt ("Input value 07")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v07")
+    }
+
+    field (V08,  DBF_NOACCESS) {
+        prompt ("Input value 08")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v08")
+    }
+
+    field (V09,  DBF_NOACCESS) {
+        prompt ("Input value 09")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v09")
+    }
+
+    field (V10,  DBF_NOACCESS) {
+        prompt ("Input value 10")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v10")
+    }
+
+    field (V11,  DBF_NOACCESS) {
+        prompt ("Input value 11")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v11")
+    }
+
+    field (V12,  DBF_NOACCESS) {
+        prompt ("Input value 12")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v12")
+    }
+
+    field (V13,  DBF_NOACCESS) {
+        prompt ("Input value 13")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v13")
+    }
+
+    field (V14,  DBF_NOACCESS) {
+        prompt ("Input value 14")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v14")
+    }
+
+    field (V15,  DBF_NOACCESS) {
+        prompt ("Input value 15")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v15")
+    }
+
+    field (V16,  DBF_NOACCESS) {
+        prompt ("Input value 16")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v16")
+    }
+
+    field (V17,  DBF_NOACCESS) {
+        prompt ("Input value 17")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v17")
+    }
+
+    field (V18,  DBF_NOACCESS) {
+        prompt ("Input value 18")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v18")
+    }
+
+    field (V19,  DBF_NOACCESS) {
+        prompt ("Input value 19")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v19")
+    }
+
+    field (V20,  DBF_NOACCESS) {
+        prompt ("Input value 20")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v20")
+    }
+
+    field (V21,  DBF_NOACCESS) {
+        prompt ("Input value 21")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v21")
+    }
+
+    field (V22,  DBF_NOACCESS) {
+        prompt ("Input value 22")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v22")
+    }
+
+    field (V23,  DBF_NOACCESS) {
+        prompt ("Input value 23")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v23")
+    }
+
+    field (V24,  DBF_NOACCESS) {
+        prompt ("Input value 24")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v24")
+    }
+
+    field (V25,  DBF_NOACCESS) {
+        prompt ("Input value 25")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v25")
+    }
+
+    field (V26,  DBF_NOACCESS) {
+        prompt ("Input value 26")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v26")
+    }
+
+    field (V27,  DBF_NOACCESS) {
+        prompt ("Input value 27")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v27")
+    }
+
+    field (V28,  DBF_NOACCESS) {
+        prompt ("Input value 28")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v28")
+    }
+
+    field (V29,  DBF_NOACCESS) {
+        prompt ("Input value 29")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v29")
+    }
+
+    field (V30,  DBF_NOACCESS) {
+        prompt ("Input value 30")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v30")
+    }
+
+    field (V31,  DBF_NOACCESS) {
+        prompt ("Input value 31")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v31")
+    }
+
+    field (V32,  DBF_NOACCESS) {
+        prompt ("Input value 32")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v32")
+    }
+
+    field (V33,  DBF_NOACCESS) {
+        prompt ("Input value 33")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v33")
+    }
+
+    field (V34,  DBF_NOACCESS) {
+        prompt ("Input value 34")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v34")
+    }
+
+    field (V35,  DBF_NOACCESS) {
+        prompt ("Input value 35")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v35")
+    }
+
+    field (V36,  DBF_NOACCESS) {
+        prompt ("Input value 36")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v36")
+    }
+
+    field (V37,  DBF_NOACCESS) {
+        prompt ("Input value 37")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v37")
+    }
+
+    field (V38,  DBF_NOACCESS) {
+        prompt ("Input value 38")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v38")
+    }
+
+    field (V39,  DBF_NOACCESS) {
+        prompt ("Input value 39")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v39")
+    }
+
+    field (V40,  DBF_NOACCESS) {
+        prompt ("Input value 40")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v40")
+    }
+
+    field (V41,  DBF_NOACCESS) {
+        prompt ("Input value 41")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v41")
+    }
+
+    field (V42,  DBF_NOACCESS) {
+        prompt ("Input value 42")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v42")
+    }
+
+    field (V43,  DBF_NOACCESS) {
+        prompt ("Input value 43")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v43")
+    }
+
+    field (V44,  DBF_NOACCESS) {
+        prompt ("Input value 44")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v44")
+    }
+
+    field (V45,  DBF_NOACCESS) {
+        prompt ("Input value 45")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v45")
+    }
+
+    field (V46,  DBF_NOACCESS) {
+        prompt ("Input value 46")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v46")
+    }
+
+    field (V47,  DBF_NOACCESS) {
+        prompt ("Input value 47")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v47")
+    }
+
+    field (V48,  DBF_NOACCESS) {
+        prompt ("Input value 48")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v48")
+    }
+
+    field (V49,  DBF_NOACCESS) {
+        prompt ("Input value 49")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v49")
+    }
+
+    field (V50,  DBF_NOACCESS) {
+        prompt ("Input value 50")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v50")
+    }
+
+    field (V51,  DBF_NOACCESS) {
+        prompt ("Input value 51")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v51")
+    }
+
+    field (V52,  DBF_NOACCESS) {
+        prompt ("Input value 52")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v52")
+    }
+
+    field (V53,  DBF_NOACCESS) {
+        prompt ("Input value 53")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v53")
+    }
+
+    field (V54,  DBF_NOACCESS) {
+        prompt ("Input value 54")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v54")
+    }
+
+    field (V55,  DBF_NOACCESS) {
+        prompt ("Input value 55")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v55")
+    }
+
+    field (V56,  DBF_NOACCESS) {
+        prompt ("Input value 56")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v56")
+    }
+
+    field (V57,  DBF_NOACCESS) {
+        prompt ("Input value 57")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v57")
+    }
+
+    field (V58,  DBF_NOACCESS) {
+        prompt ("Input value 58")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v58")
+    }
+
+    field (V59,  DBF_NOACCESS) {
+        prompt ("Input value 59")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v59")
+    }
+
+    field (V60,  DBF_NOACCESS) {
+        prompt ("Input value 60")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v60")
+    }
+
+    field (V61,  DBF_NOACCESS) {
+        prompt ("Input value 61")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v61")
+    }
+
+    field (V62,  DBF_NOACCESS) {
+        prompt ("Input value 62")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v62")
+    }
+
+    field (V63,  DBF_NOACCESS) {
+        prompt ("Input value 63")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v63")
+    }
+
+    field (V64,  DBF_NOACCESS) {
+        prompt ("Input value 64")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v64")
+    }
+
+    field (V65,  DBF_NOACCESS) {
+        prompt ("Input value 65")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v65")
+    }
+
+    field (V66,  DBF_NOACCESS) {
+        prompt ("Input value 66")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v66")
+    }
+
+    field (V67,  DBF_NOACCESS) {
+        prompt ("Input value 67")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v67")
+    }
+
+    field (V68,  DBF_NOACCESS) {
+        prompt ("Input value 68")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v68")
+    }
+
+    field (V69,  DBF_NOACCESS) {
+        prompt ("Input value 69")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v69")
+    }
+
+    field (V70,  DBF_NOACCESS) {
+        prompt ("Input value 70")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v70")
+    }
+
+    field (V71,  DBF_NOACCESS) {
+        prompt ("Input value 71")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v71")
+    }
+
+    field (V72,  DBF_NOACCESS) {
+        prompt ("Input value 72")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v72")
+    }
+
+    field (V73,  DBF_NOACCESS) {
+        prompt ("Input value 73")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v73")
+    }
+
+    field (V74,  DBF_NOACCESS) {
+        prompt ("Input value 74")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v74")
+    }
+
+    field (V75,  DBF_NOACCESS) {
+        prompt ("Input value 75")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v75")
+    }
+
+    field (V76,  DBF_NOACCESS) {
+        prompt ("Input value 76")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v76")
+    }
+
+    field (V77,  DBF_NOACCESS) {
+        prompt ("Input value 77")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v77")
+    }
+
+    field (V78,  DBF_NOACCESS) {
+        prompt ("Input value 78")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v78")
+    }
+
+    field (V79,  DBF_NOACCESS) {
+        prompt ("Input value 79")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v79")
+    }
+
+    field (V80,  DBF_NOACCESS) {
+        prompt ("Input value 80")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v80")
+    }
+
+    field (V81,  DBF_NOACCESS) {
+        prompt ("Input value 81")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v81")
+    }
+
+    field (V82,  DBF_NOACCESS) {
+        prompt ("Input value 82")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v82")
+    }
+
+    field (V83,  DBF_NOACCESS) {
+        prompt ("Input value 83")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v83")
+    }
+
+    field (V84,  DBF_NOACCESS) {
+        prompt ("Input value 84")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v84")
+    }
+
+    field (V85,  DBF_NOACCESS) {
+        prompt ("Input value 85")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v85")
+    }
+
+    field (V86,  DBF_NOACCESS) {
+        prompt ("Input value 86")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v86")
+    }
+
+    field (V87,  DBF_NOACCESS) {
+        prompt ("Input value 87")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v87")
+    }
+
+    field (V88,  DBF_NOACCESS) {
+        prompt ("Input value 88")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v88")
+    }
+
+    field (V89,  DBF_NOACCESS) {
+        prompt ("Input value 89")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v89")
+    }
+
+    field (V90,  DBF_NOACCESS) {
+        prompt ("Input value 90")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v90")
+    }
+
+    field (V91,  DBF_NOACCESS) {
+        prompt ("Input value 91")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v91")
+    }
+
+    field (V92,  DBF_NOACCESS) {
+        prompt ("Input value 92")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v92")
+    }
+
+    field (V93,  DBF_NOACCESS) {
+        prompt ("Input value 93")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v93")
+    }
+
+    field (V94,  DBF_NOACCESS) {
+        prompt ("Input value 94")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v94")
+    }
+
+    field (V95,  DBF_NOACCESS) {
+        prompt ("Input value 95")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v95")
+    }
+
+    field (V96,  DBF_NOACCESS) {
+        prompt ("Input value 96")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v96")
+    }
+
+    field (V97,  DBF_NOACCESS) {
+        prompt ("Input value 97")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v97")
+    }
+
+    field (V98,  DBF_NOACCESS) {
+        prompt ("Input value 98")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v98")
+    }
+
+    field (V99,  DBF_NOACCESS) {
+        prompt ("Input value 99")
+        asl (ASL0)
+        special (SPC_DBADDR)
+        interest (2) extra ("void *v99")
+    }
+
+}
+
+# end
