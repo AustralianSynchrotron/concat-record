@@ -1,10 +1,9 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #1 $
- * $DateTime: 2016/01/07 16:32:58 $
- * Last checked in by: $Author: pozara $
+ * $Revision: #2 $
+ * $DateTime: 2019/07/01 16:27:01 $
+ * Last checked in by: $Author: starritt $
  *
- *
- * Copyright (c) 2009-2012  Australian Synchrotron
+ * Copyright (c) 2009-2019  Australian Synchrotron
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +25,7 @@
  * Description:
  * This record allows the concatination of scalar constants, scalar PVs and
  * array PVs (such as compress, subArray and waveform records and also other
- * concat records) into array record.
+ * concat records) into an array record.
  *
  * The record can specify upto 100 inputs (IN00 to IN99).  If more than 100
  * inputs are required for concatination, then a hierachy of concat records
@@ -40,7 +39,6 @@
  *
  *      Original genSubRecord Author: Andy Foster
  *      aSubRecord Revised by: Andrew Johnson
- *
  *
  * Source code formatting:
  * indent options:  -kr -pcs -i3 -cli3 -nbbo -nut
@@ -73,28 +71,25 @@
 #include "concatRecord.h"
 #undef  GEN_SIZE_OFFSET
 
-
-typedef long (*GENFUNCPTR) (struct concatRecord *);
-
 /* Create RSET - Record Support Entry Table
  */
-#define report              NULL
-#define initialize          NULL
-static long init_record (concatRecord *, int);
-static long process (concatRecord *);
-#define special             NULL
-#define get_value           NULL
-static long cvt_dbaddr (DBADDR *);
-static long get_array_info (DBADDR *, long *, long *);
-static long put_array_info (DBADDR *, long);
-static long get_units (DBADDR *, char *);
-static long get_precision (DBADDR *, long *);
-#define get_enum_str        NULL
-#define get_enum_strs       NULL
-#define put_enum_str        NULL
+#define report                 NULL
+#define initialize             NULL
+static long init_record        (dbCommon *, int);
+static long process            (dbCommon *);
+#define special                NULL
+#define get_value              NULL
+static long cvt_dbaddr         (DBADDR *);
+static long get_array_info     (DBADDR *, long *, long *);
+static long put_array_info     (DBADDR *, long);
+static long get_units          (DBADDR *, char *);
+static long get_precision      (const DBADDR *, long *);
+#define get_enum_str           NULL
+#define get_enum_strs          NULL
+#define put_enum_str           NULL
 static long get_graphic_double (DBADDR *, struct dbr_grDouble *);
 static long get_control_double (DBADDR *, struct dbr_ctrlDouble *);
-#define get_alarm_double    NULL
+#define get_alarm_double       NULL
 
 rset concatRSET = {
    RSETNUMBER,
@@ -126,7 +121,7 @@ static long fetch_values (concatRecord * prec);
 static void monitor (concatRecord * prec);
 static long do_concat (concatRecord * prec);
 
-#define VERSION         1.3
+#define VERSION         1.4
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -638,8 +633,10 @@ static long init_pass1 (concatRecord * prec)
  */
 /* -----------------------------------------------------------------------------
  */
-static long init_record (concatRecord * prec, int pass)
+static long init_record (dbCommon * pCommon, int pass)
 {
+   concatRecord* prec = (concatRecord*) pCommon;
+
    long status;
 
    switch (pass) {
@@ -662,8 +659,10 @@ static long init_record (concatRecord * prec, int pass)
 
 /* -----------------------------------------------------------------------------
  */
-static long process (concatRecord * prec)
+static long process (dbCommon * pCommon)
 {
+   concatRecord* prec = (concatRecord*) pCommon;
+
    long status;
 
    prec->pact = TRUE;
@@ -784,7 +783,7 @@ static long get_units (DBADDR * paddr, char *units)
 
 /* -----------------------------------------------------------------------------
  */
-static long get_precision (DBADDR * paddr, long *precision)
+static long get_precision (const DBADDR* paddr, long *precision)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
    int fieldIndex;

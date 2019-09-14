@@ -27,4 +27,10 @@ BUNDLE=
 #
 EPICS_BASE=$(BUNDLE)/epics/base
 
+# Standard optional includes.
+#
+-include $(TOP)/../RELEASE.local
+-include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local
+
 # end

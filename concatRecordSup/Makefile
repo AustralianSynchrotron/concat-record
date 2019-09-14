@@ -1,7 +1,7 @@
 # $File: //ASP/tec/epics/concat/trunk/concatRecordSup/Makefile $
-# $Revision: #1 $
-# $DateTime: 2016/01/07 16:32:58 $
-# Last checked in by: $Author: pozara $
+# $Revision: #2 $
+# $DateTime: 2019/07/01 16:27:01 $
+# Last checked in by: $Author: starritt $
 #
 
 TOP=..
@@ -10,6 +10,10 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 #========================================
+
+# Make EPICS 7 friendly
+#
+USR_CFLAGS += -DUSE_TYPED_RSET
 
 #========================================
 # build a support library

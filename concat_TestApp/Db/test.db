@@ -1,10 +1,16 @@
+# $File: //ASP/tec/epics/concat/trunk/concat_TestApp/Db/test.db $
+# $Revision: #2 $
+# $DateTime: 2019/07/01 16:34:35 $
+# Last checked in by: $Author: starritt $
 #
-#
+
 record (concat, "CONCAT:T1") {
     field (SCAN, "2 second")
-    field (MAXE, "20")
-    field (PREC, "2")
+    field (NELM, "20")
     field (FTVL, "DOUBLE")
+
+    field (EGU,  "uF")
+    field (PREC, "2")
 
     field (IN01, "SCALAR:ONE")
     field (ME01, "4")

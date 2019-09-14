@@ -1,4 +1,4 @@
-#!../../bin/linux-x86/concat_Test
+#!../../bin/linux-x86_64/concat_Test
 
 ## You may have to change concat_Test to something else
 ## everywhere it appears in this file
@@ -20,3 +20,5 @@ iocInit
 
 ## Start any sequence programs
 #seq sncxxx,"user=andyHost"
+
+# end
