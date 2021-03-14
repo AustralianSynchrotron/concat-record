@@ -1,8 +1,8 @@
 #!../../bin/linux-x86_64/concat_Test
 
 # $File: //ASP/tec/epics/concat/trunk/iocBoot/iocconcat_Test/st.cmd $
-# $Revision: #2 $
-# $DateTime: 2019/07/01 16:34:35 $
+# $Revision: #3 $
+# $DateTime: 2021/03/14 14:49:47 $
 # Last checked in by: $Author: starritt $
 #
 
@@ -20,11 +20,11 @@ concat_Test_registerRecordDeviceDriver pdbbase
 ## Load record instances
 #
 dbLoadRecords ("db/test.db")
+dbLoadRecords ("db/const.db")
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit
-
-## Start any sequence programs
-#seq sncxxx,"user=andyHost"
-
+ 
+dbl
+ 
 # end

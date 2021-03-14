@@ -1,7 +1,7 @@
 <!-- $File: //ASP/tec/epics/concat/trunk/documentation/concat_record.html $ -->
-<!-- $Revision: #1 $ -->
-<!-- $DateTime: 2016/01/07 16:32:58 $ -->
-<!-- Last checked in by: $Author: pozara $ -->
+<!-- $Revision: #2 $ -->
+<!-- $DateTime: 2021/03/14 14:49:47 $ -->
+<!-- Last checked in by: $Author: starritt $ -->
 <!-- -->
 <HTML>
 <HEAD>
@@ -12,11 +12,13 @@
 <H1>Concat Record</H1>
 <H1> 1.  Introduction</H1>
 <HR>
-The concat record is used to perform concatination of scalar constants, scalar
-values retrieved from other records and array values retrieved from other
-records (such as from the compress, subArray and waveform records and also
-other concat records) into array an record.
-The result of this concatination can then be accessed by other records.<P>
+The concat record is used to perform the concatination of one or more scalar and/or
+array valued Process Variables (PVs) together with scalar constants and json link
+constant array values (the later is new since version 2.1).
+Array valued PVs may be provided by records such as an aai, a compress, a subArray,
+and/or waveform records and also by other concat records.
+The result of this concatination can then be accessed by any CA client and/or
+other records.<P>
 The fields of this record fall into these categories:<P>
 scan parameters<P>
 read parameters<P>

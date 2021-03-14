@@ -1,0 +1,93 @@
+# $File: //ASP/tec/epics/concat/trunk/concat_TestApp/Db/const.db $
+# $Revision: #1 $
+# $DateTime: 2021/03/14 14:49:47 $
+# Last checked in by: $Author: starritt $
+#
+
+record (longin, "TEST:LONG") {
+    field (DESC, "long scalar")
+    field (SCAN, "Passive")
+    field (PINI, "YES")
+    field (INP,  "42" )
+}
+
+record (aai, "TEST:AAI") {
+    field (DESC, "aai data")
+    field (SCAN, "Passive")
+    field (PINI, "YES")
+    field (FTVL, "DOUBLE")
+    field (NELM, "3")
+    field (INP, { const: [ 11.1, 22.2, 33.3 ] } )
+}
+
+record (waveform, "TEST:WF") {
+    field (DESC, "waveform data")
+    field (SCAN, "Passive")
+    field (PINI, "YES")
+    field (FTVL, "DOUBLE")
+    field (NELM, "3")
+    field (INP, { const: [ 44.4, 55.5, 66.6 ] } )
+}
+
+record (seq, "DELAYED:PINI") {
+   field (DESC, "delay")
+   field (SCAN, "Passive")
+   field (PINI, "YES")
+   field (SELM, "All")
+   field (DLY1, "1.0")
+   field (DOL1, "1")
+   field (LNK1, "TEST:CONCAT.PROC")
+   field (DLY2, "0.0")
+   field (DOL2, "1")
+   field (LNK2, "TEST:ASUB.PROC")
+}
+
+
+record (concat, "TEST:CONCAT") {
+    field (DESC, "concat data")
+    field (SCAN, "Passive")
+    field (FTVL, "DOUBLE")
+    field (NELM, "12")
+    field (NIEM, "Skip")
+    field (RIEM, "Skip")
+
+    field (IN01, "TEST:LONG")
+    field (IN02, "TEST:AAI")
+    field (IN03, "TEST:WF CA")
+    field (IN04, "314.15")
+    field (IN05, { const: [ 377.7, 388.8, 399.9 ] } )
+
+#   field (ME01, "1")
+    field (ME02, "3")
+    field (ME03, "3")
+#   field (ME04, "1")
+    field (ME05, "3")
+}
+
+record (aSub, "TEST:ASUB") {
+    field (DESC, "aSub data")
+    field (SCAN, "Passive")
+
+#   field (INAM, "testInit")
+#   field (SNAM, "testProcess")
+
+    field (INPA, "TEST:LONG")
+    field (INPB, "TEST:AAI")
+    field (INPC, "TEST:WF CA")
+    field (INPD, "314.15")
+    field (INPE, { const: [ 77.7, 88.8, 99.9 ] } )
+
+#   field (NOA,  "1")
+    field (NOB,  "3")
+    field (NOC,  "3")
+#   field (NOD,  "1")
+    field (NOE,  "4")
+
+    field (FTA,  "DOUBLE")
+    field (FTB,  "DOUBLE")
+    field (FTC,  "DOUBLE")
+    field (FTD,  "DOUBLE")
+    field (FTE,  "DOUBLE")
+}
+
+# end

@@ -1,9 +1,10 @@
 # concat record
 
-The concat record is an EPICS record is used to perform concatenation of scalar
-constants, scalar values retrieved from other records and array values retrieved
-from other records (such as from the compress, subArray and waveform records and
-also from other concat records) into array an record.
+The concat record is used to perform the concatination of one or more scalar and/or
+array valued Process Variables (PVs) together with scalar constants and json link
+constant array values (the later is new since version 2.1).
+Array valued PVs may be provided by records such as an aai, a compress, a subArray,
+and/or waveform records and also by other concat records.
 
 ## key features
 
@@ -16,4 +17,7 @@ and FTVL fields, just like the waveform record.
    - be padded with a default value.
 * supports the usual EGU, PREC, LOPR and HOPR fields.
 * it also has ADEL and MDEL fields - a monitor is posted if the delta value of
-any one element of the record exceeds the specified deadband.
+any one element of the record exceeds the specified dead-band.
+
+<font size="-1">Last updated: Sun Mar 14 12:47:25 AEDT 2021</font>
+<br>

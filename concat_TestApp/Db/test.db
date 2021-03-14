@@ -1,58 +1,52 @@
 # $File: //ASP/tec/epics/concat/trunk/concat_TestApp/Db/test.db $
-# $Revision: #2 $
-# $DateTime: 2019/07/01 16:34:35 $
+# $Revision: #3 $
+# $DateTime: 2021/03/14 14:49:47 $
 # Last checked in by: $Author: starritt $
 #
 
 record (concat, "CONCAT:T1") {
-    field (SCAN, "2 second")
+    field (SCAN, "Passive")
     field (NELM, "20")
     field (FTVL, "DOUBLE")
 
+    field (NIEM, "Pad")
+    field (RIEM, "Pad")
+    field (DFNV, "-99")
+
     field (EGU,  "uF")
-    field (PREC, "2")
+    field (PREC, "3")
 
     field (IN01, "SCALAR:ONE")
-    field (ME01, "4")
-
-    field (IN02, "SCALAR:TWO CA")
-    field (ME02, "5")
-
-    field (IN03, "3.33")
+    field (IN02, "SCALAR:TWO")
+    field (IN03, "333")
 
     field (IN04, "WF:FOUR")
-    field (ME04, "7")
+    field (ME04, "4")
 
-    field (IN05, "SR11BCM01:CURRENT_MONITOR")
-
-    field (IN06, "SR11BCM01:CURRENT_MONITOR")
-    field (ME06, "2")
-
-    field (ME08, "10")
+    field (IN05, "WF:FIVE CP")
+    field (ME05, "5")
 }
 
 record (ai, "SCALAR:ONE") {
-    field (PINI, "YES")
-    field (VAL,  "1.11")
+    field (VAL,  "1.1")
     field (PREC, "2")
+    field (FLNK, "CONCAT:T1")
 }
 
-record (ai, "SCALAR:TWO") {
-    field (PINI, "YES")
-    field (VAL,  "2.22")
-    field (PREC, "2")
+record (longin, "SCALAR:TWO") {
+    field (VAL,  "22")
+    field (FLNK, "CONCAT:T1")
 }
 
 record (waveform, "WF:FOUR") {
-    field (PINI, "YES")
-    field (NELM, "5")
+    field (NELM, "20")
     field (FTVL, "DOUBLE")
     field (PREC, "2")
+    field (FLNK, "CONCAT:T1")
 }
 
 record (waveform, "WF:FIVE") {
-    field (PINI, "YES")
-    field (NELM, "5")
+    field (NELM, "20")
     field (FTVL, "DOUBLE")
     field (PREC, "2")
 }

@@ -1,9 +1,9 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #2 $
- * $DateTime: 2019/07/01 16:27:01 $
+ * $Revision: #4 $
+ * $DateTime: 2021/03/14 14:49:47 $
  * Last checked in by: $Author: starritt $
  *
- * Copyright (c) 2009-2019  Australian Synchrotron
+ * Copyright (c) 2009-2021  Australian Synchrotron
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,13 +23,17 @@
  * 800 Blackburn Road, Clayton, Victoria 3168, Australia.
  *
  * Description:
- * This record allows the concatination of scalar constants, scalar PVs and
- * array PVs (such as compress, subArray and waveform records and also other
- * concat records) into an array record.
+ * This record allows the concatination of scalar and array constants, scalar
+ * PVs and array PVs (such as compress, subArray and waveform records and also
+ * other concat records) into an array record.
  *
  * The record can specify upto 100 inputs (IN00 to IN99).  If more than 100
  * inputs are required for concatination, then a hierachy of concat records
  * can be used.
+ * 
+ * Since version 2.1, updated to support json links for input constants.
+ * This make the concat record as is incompatible with earlier versions
+ * of EPICS base.
  *
  * Author: Andrew Starritt
  *
@@ -39,9 +43,6 @@
  *
  *      Original genSubRecord Author: Andy Foster
  *      aSubRecord Revised by: Andrew Johnson
- *
- * Source code formatting:
- * indent options:  -kr -pcs -i3 -cli3 -nbbo -nut
  *
  */
 
@@ -114,14 +115,14 @@ rset concatRSET = {
 
 epicsExportAddress (rset, concatRSET);
 
-static long init_pass0 (concatRecord * prec);
-static long init_pass1 (concatRecord * prec);
+static long init_record_pass0 (concatRecord *prec);
+static long init_record_pass1 (concatRecord *prec);
 
-static long fetch_values (concatRecord * prec);
-static void monitor (concatRecord * prec);
-static long do_concat (concatRecord * prec);
+static long fetch_values (concatRecord *prec);
+static void monitor (concatRecord *prec);
+static long do_concat (concatRecord *prec);
 
-#define VERSION         1.4
+#define VERSION         2.1
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -146,10 +147,10 @@ static long do_concat (concatRecord * prec);
 /* Last/previous values so that we can post/monitor these.
  */
 struct state_data {
-   epicsUInt32 nord;            /* Actual number elements */
-   void *val;                   /* Value */
-   epicsUInt32 number[NUM_ARGS];        /* Num. elements in NExx */
-   void *value[NUM_ARGS];       /* Input value Vxx */
+   epicsUInt32 nord;                /* Actual number elements */
+   void *val;                       /* Value */
+   epicsUInt32 number[NUM_ARGS];    /* Num. elements in NExx */
+   void *value[NUM_ARGS];           /* Input value Vxx */
 };
 
 
@@ -179,7 +180,7 @@ typedef struct concatPrivate {
 /* -----------------------------------------------------------------------------
  * errlogPrintf wrapper function
  */
-static void concatError (concatRecord * prec, const char *format, ...)
+static void concatError (concatRecord *prec, const char *format, ...)
 {
    char buffer[200];
    va_list args;
@@ -195,7 +196,7 @@ static void concatError (concatRecord * prec, const char *format, ...)
 /* -----------------------------------------------------------------------------
  * Pads element i of the input array j to specified pad value.
  */
-static void pad_input (concatRecord * prec, const int j, const int i)
+static void pad_input (concatRecord *prec, const int j, const int i)
 {
    void *input;
 
@@ -272,12 +273,12 @@ static void pad_input (concatRecord * prec, const int j, const int i)
  * Fetches the values from the single input link j.
  * Note: j goes in range 0 .. 99.
  */
-static long fetch_one_value (concatRecord * prec, const int j)
+static long fetch_one_value (concatRecord *prec, const int j)
 {
    concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
 
    epicsUInt32 max_elements;
-   long nRequstResponse;
+   long nRequst;
    epicsUInt32 number_fetched;
    epicsUInt32 number_available;
    long status;
@@ -294,10 +295,16 @@ static long fetch_one_value (concatRecord * prec, const int j)
     */
    max_elements = (&prec->me00)[j];     /* more readable alias */
 
-   nRequstResponse = max_elements;
+   nRequst = max_elements;
    status = dbGetLink (&(&prec->in00)[j], prec->ftvl,
-                       (&prec->v00)[j], 0, &nRequstResponse);
-   number_fetched = nRequstResponse;
+                       (&prec->v00)[j], 0, &nRequst);
+   if (nRequst > 0)
+      (&prec->ne00)[j] = nRequst;
+
+   /* For constants and JSON (and others) nRequst is zero,
+    * so use value setup during initialisation to define number fetched
+    */
+   number_fetched = (&prec->ne00)[j];
 
    /* Fetch successful?
     */
@@ -327,10 +334,6 @@ static long fetch_one_value (concatRecord * prec, const int j)
       action = prec->niem;
    }
 
-   /* Save effective number of elements fetched.
-    */
-   (&prec->ne00)[j] = number_fetched;
-
    /* Did - some problem occur?
     */
    if (status != 0) {
@@ -351,7 +354,7 @@ static long fetch_one_value (concatRecord * prec, const int j)
             break;
 
          case concatMODE_Pad:
-            /* Pad input with defualt value upto maximum number of elements.
+            /* Pad input with default value upto maximum number of elements.
              */
             for (i = number_fetched; i < max_elements; i++) {
                pad_input (prec, j, i);
@@ -469,12 +472,9 @@ static void field_copy (void *dest, const void *src, const int num,
 
 /* -----------------------------------------------------------------------------
  */
-static long init_pass0 (concatRecord * prec)
+static long init_record_pass0 (concatRecord * prec)
 {
    concatPrivate *rpvt;
-   size_t size;
-   size_t max_elements;
-   size_t count;
    int j;
 
    prec->vers = VERSION;
@@ -483,7 +483,7 @@ static long init_pass0 (concatRecord * prec)
     * Store away the private data for this record into the EPICS record.
     */
    rpvt = (concatPrivate *) callocMustSucceed
-       (1, sizeof (concatPrivate), "concatRecord::init_pass0");
+       (1, sizeof (concatPrivate), "concatRecord::init_record_pass0");
 
    prec->rpvt = rpvt;
 
@@ -498,123 +498,117 @@ static long init_pass0 (concatRecord * prec)
       prec->ftvl = DBF_UCHAR;
    }
 
-   size = dbValueSize (prec->ftvl);
+   const size_t size = dbValueSize (prec->ftvl);
 
    prec->val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_pass0");
+       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    prec->nord = 0;
 
    rpvt->mlst.val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_pass0");
+       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    rpvt->mlst.nord = 0;
 
    rpvt->alst.val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_pass0");
+       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    rpvt->alst.nord = 0;
 
    /* Allocate memory for input arrays.
     *
     * Determine max num of input elements
     */
-   max_elements = MAX_ARRAY_SIZE / size;
+   size_t max_elements = MAX_ARRAY_SIZE / size;
 
    for (j = 0; j < NUM_ARGS; j++) {
 
-      count = (&prec->me00)[j];
+      epicsUInt32 count = (&prec->me00)[j];
 
       if (count > max_elements) {
          count = max_elements;
+         (&prec->me00)[j] = count;
          concatError (prec, "field ME%02d too large - truncated to %d elements",
                       j, count);
       }
 
-      /* Must be at least one element.
+      /* Must be at least one element when we allocate memory.
        */
       if (count <= 0) {
          count = 1;
       }
 
       (&prec->v00)[j] =
-          callocMustSucceed (count, size, "concatRecord::init_pass0");
-      (&prec->me00)[j] = count;
+          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
       (&prec->ne00)[j] = 0;
 
       rpvt->number_available[j] = 0;
 
       rpvt->mlst.value[j] =
-          callocMustSucceed (count, size, "concatRecord::init_pass0");
+          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
       rpvt->mlst.number[j] = 0;
 
       rpvt->alst.value[j] =
-          callocMustSucceed (count, size, "concatRecord::init_pass0");
+          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
       rpvt->alst.number[j] = 0;
    }
 
    return 0;
-}                               /* init_pass0 */
+}                               /* init_record_pass0 */
 
 
 /* -----------------------------------------------------------------------------
  */
-static long init_pass1 (concatRecord * prec)
+static long init_record_pass1 (concatRecord * prec)
 {
-   concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
-
-   int status;
+   int status = 0;
    int j;
-   struct link *plink;
-   int const_status;
-   int total;
-
-   status = 0;
 
    /* Initialize Input Links
     */
-   total = 0;
+   int total = 0;
    for (j = 0; j < NUM_ARGS; j++) {
+       struct link *plink = &(&prec->in00)[j];
+       short dbr = prec->ftvl;
+       long n = (&prec->me00)[j];
 
-      plink = &(&prec->in00)[j];
-      switch (plink->type) {
+       /* The ME00, ME01 ... ME99 fields default to 0.
+        * If these values are 0 and there is anything in the input link, then set
+        * to 1 (as opposed to defaulting to 1 zand ignoring when link is empty).
+        */
+       if (n == 0) {
+          switch (plink->type) {
 
-         case CONSTANT:
-            /* We override max elements for constants.
-             * 1 for 'good' constants, 0 for invalid constants.
-             */
-            const_status =
-                recGblInitConstantLink (plink, prec->ftvl,
-                                        (&prec->v00)[j]);
-            if (const_status == TRUE) {
-               (&prec->me00)[j] = 1;
-               (&prec->ne00)[j] = 1;
-               rpvt->number_available[j] = 1;
-            } else {
-               /* Not good - assume blank */
-               (&prec->me00)[j] = 0;
-               (&prec->ne00)[j] = 0;
-               rpvt->number_available[j] = 0;
-            }
-            break;
+             case CONSTANT:
+                if (plink->value.constantStr) {
+                   n = 1;
+                }
+                break;
 
-         case PV_LINK:
-            break;
+             case JSON_LINK:
+                if (plink->value.json.string) {
+                   n = 1;
+                }
+                break;
 
-         case CA_LINK:
-            break;
+             case PV_LINK:
+             case CA_LINK:
+             case DB_LINK:
+                n = 1;
+                break;
 
-         case DB_LINK:
-            break;
+             default:
+                break;
+          }
 
-         default:
-            (&prec->me00)[j] = 0;
-            (&prec->ne00)[j] = 0;
-            rpvt->number_available[j] = 0;
-            recGblRecordError (S_db_badField, (void *) prec,
-                               "concatRecord(init_record) Illegal INPUT LINK");
-            status = S_db_badField;
-            break;
-      }
-      total += (&prec->me00)[j];
-   }                            /* loop */
+          /* ... and update the MExx field
+           */
+          (&prec->me00)[j]= n;
+       }
+
+       dbLoadLinkArray(plink, dbr, (&prec->v00)[j], &n);
+       if (n > 0)
+           (&prec->ne00)[j] = n;
+
+       total += (&prec->me00)[j];
+   }
 
    if (total > prec->nelm) {
       concatError
@@ -624,7 +618,7 @@ static long init_pass1 (concatRecord * prec)
 
    prec->udf = TRUE;
    return status;
-}                               /* init_pass1 */
+}                               /* init_record_pass1 */
 
 
 /* -----------------------------------------------------------------------------
@@ -641,11 +635,11 @@ static long init_record (dbCommon * pCommon, int pass)
 
    switch (pass) {
       case 0:
-         status = init_pass0 (prec);
+         status = init_record_pass0 (prec);
          break;
 
       case 1:
-         status = init_pass1 (prec);
+         status = init_record_pass1 (prec);
          break;
 
       default:
@@ -697,22 +691,16 @@ static long process (dbCommon * pCommon)
  */
 static long fetch_values (concatRecord * prec)
 {
-   struct link *plink;
-   long status;
    int j;
 
    /* Get the input link values
     */
    for (j = 0; j < NUM_ARGS; j++) {
 
-      plink = &(&prec->in00)[j];
-
-      /* Recall at least 1 for input links.
+      /* Recall we need at least 1 for active input links.
        */
-      if ((plink->type != CONSTANT) && (&prec->me00)[j] > 0) {
-
-         status = fetch_one_value (prec, j);
-
+      if ((&prec->me00)[j] > 0) {
+         long status = fetch_one_value (prec, j);
          if (status) {
             concatError (prec, "fetch_values input %02d failed", j);
             return status;
