@@ -1,7 +1,7 @@
 # $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.dbd $
-# $Revision: #1 $
-# $DateTime: 2016/01/07 16:32:58 $
-# Last checked in by: $Author: pozara $
+# $Revision: #2 $
+# $DateTime: 2020/01/09 12:37:02 $
+# Last checked in by: $Author: starritt $
 #
 # Description
 # Concat record dbd definition.
@@ -23,7 +23,8 @@ recordtype (concat) {
         prompt ("Value")
         asl (ASL0)
         special (SPC_DBADDR)
-        pp (TRUE) extra ("void * val")
+        pp (TRUE)
+        extra ("void * val")
     }
 
     field (VERS, DBF_DOUBLE) {
@@ -35,7 +36,8 @@ recordtype (concat) {
     field (RPVT, DBF_NOACCESS) {
         prompt ("Record Private")
         special (SPC_NOMOD)
-        interest (4) extra ("void *rpvt")
+        interest (4)
+        extra ("void *rpvt")
     }
 
     field (FTVL, DBF_MENU) {
@@ -68,7 +70,8 @@ recordtype (concat) {
     field (EGU,  DBF_STRING) {
         prompt ("Engineering Units Name")
         promptgroup (GUI_DISPLAY)
-        interest (1) size (16)
+        interest (1)
+        size (16)
     }
 
     field (HOPR, DBF_DOUBLE) {
@@ -136,7 +139,8 @@ recordtype (concat) {
         prompt ("Default String Value")
         promptgroup (GUI_DISPLAY)
         initial (" ")
-        interest (2) size (40)
+        interest (2)
+        size (40)
         pp (TRUE)
     }
 
@@ -2352,700 +2356,800 @@ recordtype (concat) {
         prompt ("Input value 00")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v00")
+        interest (2)
+        extra ("void *v00")
     }
 
     field (V01,  DBF_NOACCESS) {
         prompt ("Input value 01")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v01")
+        interest (2)
+        extra ("void *v01")
     }
 
     field (V02,  DBF_NOACCESS) {
         prompt ("Input value 02")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v02")
+        interest (2)
+        extra ("void *v02")
     }
 
     field (V03,  DBF_NOACCESS) {
         prompt ("Input value 03")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v03")
+        interest (2)
+        extra ("void *v03")
     }
 
     field (V04,  DBF_NOACCESS) {
         prompt ("Input value 04")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v04")
+        interest (2)
+        extra ("void *v04")
     }
 
     field (V05,  DBF_NOACCESS) {
         prompt ("Input value 05")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v05")
+        interest (2)
+        extra ("void *v05")
     }
 
     field (V06,  DBF_NOACCESS) {
         prompt ("Input value 06")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v06")
+        interest (2)
+        extra ("void *v06")
     }
 
     field (V07,  DBF_NOACCESS) {
         prompt ("Input value 07")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v07")
+        interest (2)
+        extra ("void *v07")
     }
 
     field (V08,  DBF_NOACCESS) {
         prompt ("Input value 08")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v08")
+        interest (2)
+        extra ("void *v08")
     }
 
     field (V09,  DBF_NOACCESS) {
         prompt ("Input value 09")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v09")
+        interest (2)
+        extra ("void *v09")
     }
 
     field (V10,  DBF_NOACCESS) {
         prompt ("Input value 10")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v10")
+        interest (2)
+        extra ("void *v10")
     }
 
     field (V11,  DBF_NOACCESS) {
         prompt ("Input value 11")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v11")
+        interest (2)
+        extra ("void *v11")
     }
 
     field (V12,  DBF_NOACCESS) {
         prompt ("Input value 12")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v12")
+        interest (2)
+        extra ("void *v12")
     }
 
     field (V13,  DBF_NOACCESS) {
         prompt ("Input value 13")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v13")
+        interest (2)
+        extra ("void *v13")
     }
 
     field (V14,  DBF_NOACCESS) {
         prompt ("Input value 14")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v14")
+        interest (2)
+        extra ("void *v14")
     }
 
     field (V15,  DBF_NOACCESS) {
         prompt ("Input value 15")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v15")
+        interest (2)
+        extra ("void *v15")
     }
 
     field (V16,  DBF_NOACCESS) {
         prompt ("Input value 16")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v16")
+        interest (2)
+        extra ("void *v16")
     }
 
     field (V17,  DBF_NOACCESS) {
         prompt ("Input value 17")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v17")
+        interest (2)
+        extra ("void *v17")
     }
 
     field (V18,  DBF_NOACCESS) {
         prompt ("Input value 18")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v18")
+        interest (2)
+        extra ("void *v18")
     }
 
     field (V19,  DBF_NOACCESS) {
         prompt ("Input value 19")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v19")
+        interest (2)
+        extra ("void *v19")
     }
 
     field (V20,  DBF_NOACCESS) {
         prompt ("Input value 20")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v20")
+        interest (2)
+        extra ("void *v20")
     }
 
     field (V21,  DBF_NOACCESS) {
         prompt ("Input value 21")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v21")
+        interest (2)
+        extra ("void *v21")
     }
 
     field (V22,  DBF_NOACCESS) {
         prompt ("Input value 22")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v22")
+        interest (2)
+        extra ("void *v22")
     }
 
     field (V23,  DBF_NOACCESS) {
         prompt ("Input value 23")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v23")
+        interest (2)
+        extra ("void *v23")
     }
 
     field (V24,  DBF_NOACCESS) {
         prompt ("Input value 24")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v24")
+        interest (2)
+        extra ("void *v24")
     }
 
     field (V25,  DBF_NOACCESS) {
         prompt ("Input value 25")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v25")
+        interest (2)
+        extra ("void *v25")
     }
 
     field (V26,  DBF_NOACCESS) {
         prompt ("Input value 26")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v26")
+        interest (2)
+        extra ("void *v26")
     }
 
     field (V27,  DBF_NOACCESS) {
         prompt ("Input value 27")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v27")
+        interest (2)
+        extra ("void *v27")
     }
 
     field (V28,  DBF_NOACCESS) {
         prompt ("Input value 28")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v28")
+        interest (2)
+        extra ("void *v28")
     }
 
     field (V29,  DBF_NOACCESS) {
         prompt ("Input value 29")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v29")
+        interest (2)
+        extra ("void *v29")
     }
 
     field (V30,  DBF_NOACCESS) {
         prompt ("Input value 30")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v30")
+        interest (2)
+        extra ("void *v30")
     }
 
     field (V31,  DBF_NOACCESS) {
         prompt ("Input value 31")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v31")
+        interest (2)
+        extra ("void *v31")
     }
 
     field (V32,  DBF_NOACCESS) {
         prompt ("Input value 32")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v32")
+        interest (2)
+        extra ("void *v32")
     }
 
     field (V33,  DBF_NOACCESS) {
         prompt ("Input value 33")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v33")
+        interest (2)
+        extra ("void *v33")
     }
 
     field (V34,  DBF_NOACCESS) {
         prompt ("Input value 34")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v34")
+        interest (2)
+        extra ("void *v34")
     }
 
     field (V35,  DBF_NOACCESS) {
         prompt ("Input value 35")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v35")
+        interest (2)
+        extra ("void *v35")
     }
 
     field (V36,  DBF_NOACCESS) {
         prompt ("Input value 36")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v36")
+        interest (2)
+        extra ("void *v36")
     }
 
     field (V37,  DBF_NOACCESS) {
         prompt ("Input value 37")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v37")
+        interest (2)
+        extra ("void *v37")
     }
 
     field (V38,  DBF_NOACCESS) {
         prompt ("Input value 38")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v38")
+        interest (2)
+        extra ("void *v38")
     }
 
     field (V39,  DBF_NOACCESS) {
         prompt ("Input value 39")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v39")
+        interest (2)
+        extra ("void *v39")
     }
 
     field (V40,  DBF_NOACCESS) {
         prompt ("Input value 40")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v40")
+        interest (2)
+        extra ("void *v40")
     }
 
     field (V41,  DBF_NOACCESS) {
         prompt ("Input value 41")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v41")
+        interest (2)
+        extra ("void *v41")
     }
 
     field (V42,  DBF_NOACCESS) {
         prompt ("Input value 42")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v42")
+        interest (2)
+        extra ("void *v42")
     }
 
     field (V43,  DBF_NOACCESS) {
         prompt ("Input value 43")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v43")
+        interest (2)
+        extra ("void *v43")
     }
 
     field (V44,  DBF_NOACCESS) {
         prompt ("Input value 44")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v44")
+        interest (2)
+        extra ("void *v44")
     }
 
     field (V45,  DBF_NOACCESS) {
         prompt ("Input value 45")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v45")
+        interest (2)
+        extra ("void *v45")
     }
 
     field (V46,  DBF_NOACCESS) {
         prompt ("Input value 46")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v46")
+        interest (2)
+        extra ("void *v46")
     }
 
     field (V47,  DBF_NOACCESS) {
         prompt ("Input value 47")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v47")
+        interest (2)
+        extra ("void *v47")
     }
 
     field (V48,  DBF_NOACCESS) {
         prompt ("Input value 48")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v48")
+        interest (2)
+        extra ("void *v48")
     }
 
     field (V49,  DBF_NOACCESS) {
         prompt ("Input value 49")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v49")
+        interest (2)
+        extra ("void *v49")
     }
 
     field (V50,  DBF_NOACCESS) {
         prompt ("Input value 50")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v50")
+        interest (2)
+        extra ("void *v50")
     }
 
     field (V51,  DBF_NOACCESS) {
         prompt ("Input value 51")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v51")
+        interest (2)
+        extra ("void *v51")
     }
 
     field (V52,  DBF_NOACCESS) {
         prompt ("Input value 52")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v52")
+        interest (2)
+        extra ("void *v52")
     }
 
     field (V53,  DBF_NOACCESS) {
         prompt ("Input value 53")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v53")
+        interest (2)
+        extra ("void *v53")
     }
 
     field (V54,  DBF_NOACCESS) {
         prompt ("Input value 54")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v54")
+        interest (2)
+        extra ("void *v54")
     }
 
     field (V55,  DBF_NOACCESS) {
         prompt ("Input value 55")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v55")
+        interest (2)
+        extra ("void *v55")
     }
 
     field (V56,  DBF_NOACCESS) {
         prompt ("Input value 56")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v56")
+        interest (2)
+        extra ("void *v56")
     }
 
     field (V57,  DBF_NOACCESS) {
         prompt ("Input value 57")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v57")
+        interest (2)
+        extra ("void *v57")
     }
 
     field (V58,  DBF_NOACCESS) {
         prompt ("Input value 58")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v58")
+        interest (2)
+        extra ("void *v58")
     }
 
     field (V59,  DBF_NOACCESS) {
         prompt ("Input value 59")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v59")
+        interest (2)
+        extra ("void *v59")
     }
 
     field (V60,  DBF_NOACCESS) {
         prompt ("Input value 60")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v60")
+        interest (2)
+        extra ("void *v60")
     }
 
     field (V61,  DBF_NOACCESS) {
         prompt ("Input value 61")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v61")
+        interest (2)
+        extra ("void *v61")
     }
 
     field (V62,  DBF_NOACCESS) {
         prompt ("Input value 62")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v62")
+        interest (2)
+        extra ("void *v62")
     }
 
     field (V63,  DBF_NOACCESS) {
         prompt ("Input value 63")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v63")
+        interest (2)
+        extra ("void *v63")
     }
 
     field (V64,  DBF_NOACCESS) {
         prompt ("Input value 64")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v64")
+        interest (2)
+        extra ("void *v64")
     }
 
     field (V65,  DBF_NOACCESS) {
         prompt ("Input value 65")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v65")
+        interest (2)
+        extra ("void *v65")
     }
 
     field (V66,  DBF_NOACCESS) {
         prompt ("Input value 66")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v66")
+        interest (2)
+        extra ("void *v66")
     }
 
     field (V67,  DBF_NOACCESS) {
         prompt ("Input value 67")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v67")
+        interest (2)
+        extra ("void *v67")
     }
 
     field (V68,  DBF_NOACCESS) {
         prompt ("Input value 68")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v68")
+        interest (2)
+        extra ("void *v68")
     }
 
     field (V69,  DBF_NOACCESS) {
         prompt ("Input value 69")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v69")
+        interest (2)
+        extra ("void *v69")
     }
 
     field (V70,  DBF_NOACCESS) {
         prompt ("Input value 70")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v70")
+        interest (2)
+        extra ("void *v70")
     }
 
     field (V71,  DBF_NOACCESS) {
         prompt ("Input value 71")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v71")
+        interest (2)
+        extra ("void *v71")
     }
 
     field (V72,  DBF_NOACCESS) {
         prompt ("Input value 72")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v72")
+        interest (2)
+        extra ("void *v72")
     }
 
     field (V73,  DBF_NOACCESS) {
         prompt ("Input value 73")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v73")
+        interest (2)
+        extra ("void *v73")
     }
 
     field (V74,  DBF_NOACCESS) {
         prompt ("Input value 74")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v74")
+        interest (2)
+        extra ("void *v74")
     }
 
     field (V75,  DBF_NOACCESS) {
         prompt ("Input value 75")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v75")
+        interest (2)
+        extra ("void *v75")
     }
 
     field (V76,  DBF_NOACCESS) {
         prompt ("Input value 76")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v76")
+        interest (2)
+        extra ("void *v76")
     }
 
     field (V77,  DBF_NOACCESS) {
         prompt ("Input value 77")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v77")
+        interest (2)
+        extra ("void *v77")
     }
 
     field (V78,  DBF_NOACCESS) {
         prompt ("Input value 78")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v78")
+        interest (2)
+        extra ("void *v78")
     }
 
     field (V79,  DBF_NOACCESS) {
         prompt ("Input value 79")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v79")
+        interest (2)
+        extra ("void *v79")
     }
 
     field (V80,  DBF_NOACCESS) {
         prompt ("Input value 80")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v80")
+        interest (2)
+        extra ("void *v80")
     }
 
     field (V81,  DBF_NOACCESS) {
         prompt ("Input value 81")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v81")
+        interest (2)
+        extra ("void *v81")
     }
 
     field (V82,  DBF_NOACCESS) {
         prompt ("Input value 82")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v82")
+        interest (2)
+        extra ("void *v82")
     }
 
     field (V83,  DBF_NOACCESS) {
         prompt ("Input value 83")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v83")
+        interest (2)
+        extra ("void *v83")
     }
 
     field (V84,  DBF_NOACCESS) {
         prompt ("Input value 84")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v84")
+        interest (2)
+        extra ("void *v84")
     }
 
     field (V85,  DBF_NOACCESS) {
         prompt ("Input value 85")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v85")
+        interest (2)
+        extra ("void *v85")
     }
 
     field (V86,  DBF_NOACCESS) {
         prompt ("Input value 86")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v86")
+        interest (2)
+        extra ("void *v86")
     }
 
     field (V87,  DBF_NOACCESS) {
         prompt ("Input value 87")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v87")
+        interest (2)
+        extra ("void *v87")
     }
 
     field (V88,  DBF_NOACCESS) {
         prompt ("Input value 88")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v88")
+        interest (2)
+        extra ("void *v88")
     }
 
     field (V89,  DBF_NOACCESS) {
         prompt ("Input value 89")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v89")
+        interest (2)
+        extra ("void *v89")
     }
 
     field (V90,  DBF_NOACCESS) {
         prompt ("Input value 90")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v90")
+        interest (2)
+        extra ("void *v90")
     }
 
     field (V91,  DBF_NOACCESS) {
         prompt ("Input value 91")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v91")
+        interest (2)
+        extra ("void *v91")
     }
 
     field (V92,  DBF_NOACCESS) {
         prompt ("Input value 92")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v92")
+        interest (2)
+        extra ("void *v92")
     }
 
     field (V93,  DBF_NOACCESS) {
         prompt ("Input value 93")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v93")
+        interest (2)
+        extra ("void *v93")
     }
 
     field (V94,  DBF_NOACCESS) {
         prompt ("Input value 94")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v94")
+        interest (2)
+        extra ("void *v94")
     }
 
     field (V95,  DBF_NOACCESS) {
         prompt ("Input value 95")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v95")
+        interest (2)
+        extra ("void *v95")
     }
 
     field (V96,  DBF_NOACCESS) {
         prompt ("Input value 96")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v96")
+        interest (2)
+        extra ("void *v96")
     }
 
     field (V97,  DBF_NOACCESS) {
         prompt ("Input value 97")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v97")
+        interest (2)
+        extra ("void *v97")
     }
 
     field (V98,  DBF_NOACCESS) {
         prompt ("Input value 98")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v98")
+        interest (2)
+        extra ("void *v98")
     }
 
     field (V99,  DBF_NOACCESS) {
         prompt ("Input value 99")
         asl (ASL0)
         special (SPC_DBADDR)
-        interest (2) extra ("void *v99")
+        interest (2)
+        extra ("void *v99")
     }
 
 }
