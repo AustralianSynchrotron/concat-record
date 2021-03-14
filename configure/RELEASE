@@ -1,3 +1,8 @@
+# $File: //ASP/tec/epics/concat/trunk/configure/RELEASE $
+# $Revision: #4 $
+# $DateTime: 2019/10/11 17:16:06 $
+# Last checked in by: $Author: starritt $
+#
 #RELEASE Location of external products
 # Run "gnumake clean uninstall install" in the application
 # top directory each time this file is changed.
@@ -14,8 +19,8 @@ TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 # define INSTALL_LOCATION_APP here
 #INSTALL_LOCATION_APP=<fullpathname>
 
-# Note: Bundle is defined when when this module is prebuilt.
-# Leave blank so that module remains compatible with formal build system.
+# Note: Bundle is defined when this module is prebuilt.
+# Leave blank so that module remains compatible with the easy build system.
 #
 BUNDLE=
 

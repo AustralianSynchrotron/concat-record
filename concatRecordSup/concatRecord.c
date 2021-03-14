@@ -73,23 +73,23 @@
 
 /* Create RSET - Record Support Entry Table
  */
-#define report                 NULL
-#define initialize             NULL
-static long init_record        (dbCommon *, int);
-static long process            (dbCommon *);
-#define special                NULL
-#define get_value              NULL
-static long cvt_dbaddr         (DBADDR *);
-static long get_array_info     (DBADDR *, long *, long *);
-static long put_array_info     (DBADDR *, long);
-static long get_units          (DBADDR *, char *);
-static long get_precision      (const DBADDR *, long *);
-#define get_enum_str           NULL
-#define get_enum_strs          NULL
-#define put_enum_str           NULL
+#define report              NULL
+#define initialize          NULL
+static long init_record (dbCommon *, int);
+static long process (dbCommon *);
+#define special             NULL
+#define get_value           NULL
+static long cvt_dbaddr (DBADDR *);
+static long get_array_info (DBADDR *, long *, long *);
+static long put_array_info (DBADDR *, long);
+static long get_units (DBADDR *, char *);
+static long get_precision (const DBADDR *, long *);
+#define get_enum_str        NULL
+#define get_enum_strs       NULL
+#define put_enum_str        NULL
 static long get_graphic_double (DBADDR *, struct dbr_grDouble *);
 static long get_control_double (DBADDR *, struct dbr_ctrlDouble *);
-#define get_alarm_double       NULL
+#define get_alarm_double    NULL
 
 rset concatRSET = {
    RSETNUMBER,
