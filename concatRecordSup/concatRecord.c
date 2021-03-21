@@ -1,6 +1,6 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #4 $
- * $DateTime: 2021/03/14 14:49:47 $
+ * $Revision: #5 $
+ * $DateTime: 2021/03/21 13:16:47 $
  * Last checked in by: $Author: starritt $
  *
  * Copyright (c) 2009-2021  Australian Synchrotron
@@ -194,7 +194,7 @@ static void concatError (concatRecord *prec, const char *format, ...)
 
 
 /* -----------------------------------------------------------------------------
- * Pads element i of the input array j to specified pad value.
+ * Pads element i of the input array j with specified pad value.
  */
 static void pad_input (concatRecord *prec, const int j, const int i)
 {
@@ -277,34 +277,29 @@ static long fetch_one_value (concatRecord *prec, const int j)
 {
    concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
 
-   epicsUInt32 max_elements;
-   long nRequst;
-   epicsUInt32 number_fetched;
-   epicsUInt32 number_available;
-   long status;
-   int i;
-   concatMODE action = concatMODE_Fail;
-
    /* Note on field access:
     *
     *   prec->me00       refers to field ME00 (which happends to be epicsUInt32)
     *   &prec->me00      is not just an address but is an epicsUInt32* pointer to prec->me00.
-    *  (&prec->me00)[j]  deferences the implicit type pointer to access ME<J>
+    *  (&prec->me00)[j]  deferences the implicit type pointer to access ME<j>
     *
     * The advantage of this is we don't make any assumptions about the field type/size.
     */
-   max_elements = (&prec->me00)[j];     /* more readable alias */
+   const epicsUInt32 max_elements = (&prec->me00)[j];     /* more readable alias */
 
-   nRequst = max_elements;
-   status = dbGetLink (&(&prec->in00)[j], prec->ftvl,
-                       (&prec->v00)[j], 0, &nRequst);
-   if (nRequst > 0)
-      (&prec->ne00)[j] = nRequst;
+   long nRequst = max_elements;
+   long status = dbGetLink (&(&prec->in00)[j], prec->ftvl,
+                            (&prec->v00)[j], 0, &nRequst);
 
-   /* For constants and JSON (and others) nRequst is zero,
-    * so use value setup during initialisation to define number fetched
+   /* For constants and JSON (and others) nRequest is zero, which is why
+    * fetch_values () skips over these.
+    * The value setup during initialisation defines number fetched,
     */
-   number_fetched = (&prec->ne00)[j];
+   const epicsUInt32 number_fetched = nRequst;
+   (&prec->ne00)[j] = number_fetched;
+
+   epicsUInt32 number_available = number_fetched;
+   concatMODE action = concatMODE_Fail;
 
    /* Fetch successful?
     */
@@ -312,14 +307,13 @@ static long fetch_one_value (concatRecord *prec, const int j)
 
       /* Yes - ensure sensible number_fetched.
        */
-      if (number_fetched > max_elements) {
-         number_fetched = max_elements;
+      if (number_available > max_elements) {
+         number_available = max_elements;
       }
-      number_available = number_fetched;
 
       /* Did we get all the expected values?
        */
-      if (number_fetched < max_elements) {
+      if (number_available < max_elements) {
          /* Reduced input - i.e. less than expected maximum.
           */
          status = -1;
@@ -329,7 +323,6 @@ static long fetch_one_value (concatRecord *prec, const int j)
    } else {
       /* Fetch failed - no input.
        */
-      number_fetched = 0;
       number_available = 0;
       action = prec->niem;
    }
@@ -356,8 +349,11 @@ static long fetch_one_value (concatRecord *prec, const int j)
          case concatMODE_Pad:
             /* Pad input with default value upto maximum number of elements.
              */
-            for (i = number_fetched; i < max_elements; i++) {
-               pad_input (prec, j, i);
+            {
+               int i;
+               for (i = number_fetched; i < max_elements; i++) {
+                  pad_input (prec, j, i);
+               }
             }
             number_available = max_elements;
             status = 0;
@@ -558,6 +554,8 @@ static long init_record_pass0 (concatRecord * prec)
  */
 static long init_record_pass1 (concatRecord * prec)
 {
+   concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
+
    int status = 0;
    int j;
 
@@ -571,48 +569,55 @@ static long init_record_pass1 (concatRecord * prec)
 
        /* The ME00, ME01 ... ME99 fields default to 0.
         * If these values are 0 and there is anything in the input link, then set
-        * to 1 (as opposed to defaulting to 1 zand ignoring when link is empty).
+        * to 1 (as opposed to defaulting to 1 and ignoring when link is empty).
         */
-       if (n == 0) {
-          switch (plink->type) {
+       switch (plink->type) {
 
-             case CONSTANT:
-                if (plink->value.constantStr) {
-                   n = 1;
-                }
-                break;
-
-             case JSON_LINK:
-                if (plink->value.json.string) {
-                   n = 1;
-                }
-                break;
-
-             case PV_LINK:
-             case CA_LINK:
-             case DB_LINK:
+          case CONSTANT:
+             if ((n == 0) && plink->value.constantStr) {
                 n = 1;
-                break;
+             }
+             break;
 
-             default:
-                break;
-          }
+          case JSON_LINK:
+             if ((n == 0) && plink->value.json.string) {
+                n = 1;
+             }
+             break;
 
-          /* ... and update the MExx field
-           */
-          (&prec->me00)[j]= n;
+          case PV_LINK:
+          case CA_LINK:
+          case DB_LINK:
+             if (n == 0) {
+                n = 1;
+             }
+             break;
+
+          default:
+             n = 0;
+             rpvt->number_available[j] = 0;
+             recGblRecordError (S_db_badField, (void *) prec,
+                                "concatRecord(init_record) Illegal INPUT LINK");
+             status = S_db_badField;
+             break;
        }
 
+       /* ... and update the MExx field
+        */
+       (&prec->me00)[j]= n;
+
        dbLoadLinkArray(plink, dbr, (&prec->v00)[j], &n);
-       if (n > 0)
+       if (n > 0) {
            (&prec->ne00)[j] = n;
+           rpvt->number_available[j] = n;
+       }
 
        total += (&prec->me00)[j];
-   }
+   }                            /* loop */
 
    if (total > prec->nelm) {
       concatError
-          (prec, "warning: sum of ME values (%d) exceeds allocated (NELM=%d) size",
+          (prec, "warning: sum of max MEnn values (%d) exceeds allocated (NELM=%d) size",
            total, prec->nelm);
    }
 
@@ -697,9 +702,14 @@ static long fetch_values (concatRecord * prec)
     */
    for (j = 0; j < NUM_ARGS; j++) {
 
+      const epicsUInt32 maxElements = (&prec->me00)[j];
+      const struct link *plink = &(&prec->in00)[j];
+      const short linkType = plink->type;
+
       /* Recall we need at least 1 for active input links.
+       * Also constant and json links are already "fetched".
        */
-      if ((&prec->me00)[j] > 0) {
+      if ((linkType != CONSTANT) && (linkType != JSON_LINK) && (maxElements > 0)) {
          long status = fetch_one_value (prec, j);
          if (status) {
             concatError (prec, "fetch_values input %02d failed", j);

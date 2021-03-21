@@ -1551,7 +1551,7 @@ recordtype (concat) {
     # NE00 through NE99 must be contiguous
     #
     field (NE00, DBF_ULONG) {
-        prompt ("Num. elememts in 00")
+        prompt ("Num. elements in 00")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1559,7 +1559,7 @@ recordtype (concat) {
     }
 
     field (NE01, DBF_ULONG) {
-        prompt ("Num. elememts in 01")
+        prompt ("Num. elements in 01")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1567,7 +1567,7 @@ recordtype (concat) {
     }
 
     field (NE02, DBF_ULONG) {
-        prompt ("Num. elememts in 02")
+        prompt ("Num. elements in 02")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1575,7 +1575,7 @@ recordtype (concat) {
     }
 
     field (NE03, DBF_ULONG) {
-        prompt ("Num. elememts in 03")
+        prompt ("Num. elements in 03")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1583,7 +1583,7 @@ recordtype (concat) {
     }
 
     field (NE04, DBF_ULONG) {
-        prompt ("Num. elememts in 04")
+        prompt ("Num. elements in 04")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1591,7 +1591,7 @@ recordtype (concat) {
     }
 
     field (NE05, DBF_ULONG) {
-        prompt ("Num. elememts in 05")
+        prompt ("Num. elements in 05")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1599,7 +1599,7 @@ recordtype (concat) {
     }
 
     field (NE06, DBF_ULONG) {
-        prompt ("Num. elememts in 06")
+        prompt ("Num. elements in 06")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1607,7 +1607,7 @@ recordtype (concat) {
     }
 
     field (NE07, DBF_ULONG) {
-        prompt ("Num. elememts in 07")
+        prompt ("Num. elements in 07")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1615,7 +1615,7 @@ recordtype (concat) {
     }
 
     field (NE08, DBF_ULONG) {
-        prompt ("Num. elememts in 08")
+        prompt ("Num. elements in 08")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1623,7 +1623,7 @@ recordtype (concat) {
     }
 
     field (NE09, DBF_ULONG) {
-        prompt ("Num. elememts in 09")
+        prompt ("Num. elements in 09")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1631,7 +1631,7 @@ recordtype (concat) {
     }
 
     field (NE10, DBF_ULONG) {
-        prompt ("Num. elememts in 10")
+        prompt ("Num. elements in 10")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1639,7 +1639,7 @@ recordtype (concat) {
     }
 
     field (NE11, DBF_ULONG) {
-        prompt ("Num. elememts in 11")
+        prompt ("Num. elements in 11")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1647,7 +1647,7 @@ recordtype (concat) {
     }
 
     field (NE12, DBF_ULONG) {
-        prompt ("Num. elememts in 12")
+        prompt ("Num. elements in 12")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1655,7 +1655,7 @@ recordtype (concat) {
     }
 
     field (NE13, DBF_ULONG) {
-        prompt ("Num. elememts in 13")
+        prompt ("Num. elements in 13")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1663,7 +1663,7 @@ recordtype (concat) {
     }
 
     field (NE14, DBF_ULONG) {
-        prompt ("Num. elememts in 14")
+        prompt ("Num. elements in 14")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1671,7 +1671,7 @@ recordtype (concat) {
     }
 
     field (NE15, DBF_ULONG) {
-        prompt ("Num. elememts in 15")
+        prompt ("Num. elements in 15")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1679,7 +1679,7 @@ recordtype (concat) {
     }
 
     field (NE16, DBF_ULONG) {
-        prompt ("Num. elememts in 16")
+        prompt ("Num. elements in 16")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1687,7 +1687,7 @@ recordtype (concat) {
     }
 
     field (NE17, DBF_ULONG) {
-        prompt ("Num. elememts in 17")
+        prompt ("Num. elements in 17")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1695,7 +1695,7 @@ recordtype (concat) {
     }
 
     field (NE18, DBF_ULONG) {
-        prompt ("Num. elememts in 18")
+        prompt ("Num. elements in 18")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1703,7 +1703,7 @@ recordtype (concat) {
     }
 
     field (NE19, DBF_ULONG) {
-        prompt ("Num. elememts in 19")
+        prompt ("Num. elements in 19")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1711,7 +1711,7 @@ recordtype (concat) {
     }
 
     field (NE20, DBF_ULONG) {
-        prompt ("Num. elememts in 20")
+        prompt ("Num. elements in 20")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1719,7 +1719,7 @@ recordtype (concat) {
     }
 
     field (NE21, DBF_ULONG) {
-        prompt ("Num. elememts in 21")
+        prompt ("Num. elements in 21")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1727,7 +1727,7 @@ recordtype (concat) {
     }
 
     field (NE22, DBF_ULONG) {
-        prompt ("Num. elememts in 22")
+        prompt ("Num. elements in 22")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1735,7 +1735,7 @@ recordtype (concat) {
     }
 
     field (NE23, DBF_ULONG) {
-        prompt ("Num. elememts in 23")
+        prompt ("Num. elements in 23")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1743,7 +1743,7 @@ recordtype (concat) {
     }
 
     field (NE24, DBF_ULONG) {
-        prompt ("Num. elememts in 24")
+        prompt ("Num. elements in 24")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1751,7 +1751,7 @@ recordtype (concat) {
     }
 
     field (NE25, DBF_ULONG) {
-        prompt ("Num. elememts in 25")
+        prompt ("Num. elements in 25")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1759,7 +1759,7 @@ recordtype (concat) {
     }
 
     field (NE26, DBF_ULONG) {
-        prompt ("Num. elememts in 26")
+        prompt ("Num. elements in 26")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1767,7 +1767,7 @@ recordtype (concat) {
     }
 
     field (NE27, DBF_ULONG) {
-        prompt ("Num. elememts in 27")
+        prompt ("Num. elements in 27")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1775,7 +1775,7 @@ recordtype (concat) {
     }
 
     field (NE28, DBF_ULONG) {
-        prompt ("Num. elememts in 28")
+        prompt ("Num. elements in 28")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1783,7 +1783,7 @@ recordtype (concat) {
     }
 
     field (NE29, DBF_ULONG) {
-        prompt ("Num. elememts in 29")
+        prompt ("Num. elements in 29")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1791,7 +1791,7 @@ recordtype (concat) {
     }
 
     field (NE30, DBF_ULONG) {
-        prompt ("Num. elememts in 30")
+        prompt ("Num. elements in 30")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1799,7 +1799,7 @@ recordtype (concat) {
     }
 
     field (NE31, DBF_ULONG) {
-        prompt ("Num. elememts in 31")
+        prompt ("Num. elements in 31")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1807,7 +1807,7 @@ recordtype (concat) {
     }
 
     field (NE32, DBF_ULONG) {
-        prompt ("Num. elememts in 32")
+        prompt ("Num. elements in 32")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1815,7 +1815,7 @@ recordtype (concat) {
     }
 
     field (NE33, DBF_ULONG) {
-        prompt ("Num. elememts in 33")
+        prompt ("Num. elements in 33")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1823,7 +1823,7 @@ recordtype (concat) {
     }
 
     field (NE34, DBF_ULONG) {
-        prompt ("Num. elememts in 34")
+        prompt ("Num. elements in 34")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1831,7 +1831,7 @@ recordtype (concat) {
     }
 
     field (NE35, DBF_ULONG) {
-        prompt ("Num. elememts in 35")
+        prompt ("Num. elements in 35")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1839,7 +1839,7 @@ recordtype (concat) {
     }
 
     field (NE36, DBF_ULONG) {
-        prompt ("Num. elememts in 36")
+        prompt ("Num. elements in 36")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1847,7 +1847,7 @@ recordtype (concat) {
     }
 
     field (NE37, DBF_ULONG) {
-        prompt ("Num. elememts in 37")
+        prompt ("Num. elements in 37")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1855,7 +1855,7 @@ recordtype (concat) {
     }
 
     field (NE38, DBF_ULONG) {
-        prompt ("Num. elememts in 38")
+        prompt ("Num. elements in 38")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1863,7 +1863,7 @@ recordtype (concat) {
     }
 
     field (NE39, DBF_ULONG) {
-        prompt ("Num. elememts in 39")
+        prompt ("Num. elements in 39")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1871,7 +1871,7 @@ recordtype (concat) {
     }
 
     field (NE40, DBF_ULONG) {
-        prompt ("Num. elememts in 40")
+        prompt ("Num. elements in 40")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1879,7 +1879,7 @@ recordtype (concat) {
     }
 
     field (NE41, DBF_ULONG) {
-        prompt ("Num. elememts in 41")
+        prompt ("Num. elements in 41")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1887,7 +1887,7 @@ recordtype (concat) {
     }
 
     field (NE42, DBF_ULONG) {
-        prompt ("Num. elememts in 42")
+        prompt ("Num. elements in 42")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1895,7 +1895,7 @@ recordtype (concat) {
     }
 
     field (NE43, DBF_ULONG) {
-        prompt ("Num. elememts in 43")
+        prompt ("Num. elements in 43")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1903,7 +1903,7 @@ recordtype (concat) {
     }
 
     field (NE44, DBF_ULONG) {
-        prompt ("Num. elememts in 44")
+        prompt ("Num. elements in 44")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1911,7 +1911,7 @@ recordtype (concat) {
     }
 
     field (NE45, DBF_ULONG) {
-        prompt ("Num. elememts in 45")
+        prompt ("Num. elements in 45")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1919,7 +1919,7 @@ recordtype (concat) {
     }
 
     field (NE46, DBF_ULONG) {
-        prompt ("Num. elememts in 46")
+        prompt ("Num. elements in 46")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1927,7 +1927,7 @@ recordtype (concat) {
     }
 
     field (NE47, DBF_ULONG) {
-        prompt ("Num. elememts in 47")
+        prompt ("Num. elements in 47")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1935,7 +1935,7 @@ recordtype (concat) {
     }
 
     field (NE48, DBF_ULONG) {
-        prompt ("Num. elememts in 48")
+        prompt ("Num. elements in 48")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1943,7 +1943,7 @@ recordtype (concat) {
     }
 
     field (NE49, DBF_ULONG) {
-        prompt ("Num. elememts in 49")
+        prompt ("Num. elements in 49")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1951,7 +1951,7 @@ recordtype (concat) {
     }
 
     field (NE50, DBF_ULONG) {
-        prompt ("Num. elememts in 50")
+        prompt ("Num. elements in 50")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1959,7 +1959,7 @@ recordtype (concat) {
     }
 
     field (NE51, DBF_ULONG) {
-        prompt ("Num. elememts in 51")
+        prompt ("Num. elements in 51")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1967,7 +1967,7 @@ recordtype (concat) {
     }
 
     field (NE52, DBF_ULONG) {
-        prompt ("Num. elememts in 52")
+        prompt ("Num. elements in 52")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1975,7 +1975,7 @@ recordtype (concat) {
     }
 
     field (NE53, DBF_ULONG) {
-        prompt ("Num. elememts in 53")
+        prompt ("Num. elements in 53")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1983,7 +1983,7 @@ recordtype (concat) {
     }
 
     field (NE54, DBF_ULONG) {
-        prompt ("Num. elememts in 54")
+        prompt ("Num. elements in 54")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1991,7 +1991,7 @@ recordtype (concat) {
     }
 
     field (NE55, DBF_ULONG) {
-        prompt ("Num. elememts in 55")
+        prompt ("Num. elements in 55")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -1999,7 +1999,7 @@ recordtype (concat) {
     }
 
     field (NE56, DBF_ULONG) {
-        prompt ("Num. elememts in 56")
+        prompt ("Num. elements in 56")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2007,7 +2007,7 @@ recordtype (concat) {
     }
 
     field (NE57, DBF_ULONG) {
-        prompt ("Num. elememts in 57")
+        prompt ("Num. elements in 57")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2015,7 +2015,7 @@ recordtype (concat) {
     }
 
     field (NE58, DBF_ULONG) {
-        prompt ("Num. elememts in 58")
+        prompt ("Num. elements in 58")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2023,7 +2023,7 @@ recordtype (concat) {
     }
 
     field (NE59, DBF_ULONG) {
-        prompt ("Num. elememts in 59")
+        prompt ("Num. elements in 59")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2031,7 +2031,7 @@ recordtype (concat) {
     }
 
     field (NE60, DBF_ULONG) {
-        prompt ("Num. elememts in 60")
+        prompt ("Num. elements in 60")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2039,7 +2039,7 @@ recordtype (concat) {
     }
 
     field (NE61, DBF_ULONG) {
-        prompt ("Num. elememts in 61")
+        prompt ("Num. elements in 61")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2047,7 +2047,7 @@ recordtype (concat) {
     }
 
     field (NE62, DBF_ULONG) {
-        prompt ("Num. elememts in 62")
+        prompt ("Num. elements in 62")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2055,7 +2055,7 @@ recordtype (concat) {
     }
 
     field (NE63, DBF_ULONG) {
-        prompt ("Num. elememts in 63")
+        prompt ("Num. elements in 63")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2063,7 +2063,7 @@ recordtype (concat) {
     }
 
     field (NE64, DBF_ULONG) {
-        prompt ("Num. elememts in 64")
+        prompt ("Num. elements in 64")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2071,7 +2071,7 @@ recordtype (concat) {
     }
 
     field (NE65, DBF_ULONG) {
-        prompt ("Num. elememts in 65")
+        prompt ("Num. elements in 65")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2079,7 +2079,7 @@ recordtype (concat) {
     }
 
     field (NE66, DBF_ULONG) {
-        prompt ("Num. elememts in 66")
+        prompt ("Num. elements in 66")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2087,7 +2087,7 @@ recordtype (concat) {
     }
 
     field (NE67, DBF_ULONG) {
-        prompt ("Num. elememts in 67")
+        prompt ("Num. elements in 67")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2095,7 +2095,7 @@ recordtype (concat) {
     }
 
     field (NE68, DBF_ULONG) {
-        prompt ("Num. elememts in 68")
+        prompt ("Num. elements in 68")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2103,7 +2103,7 @@ recordtype (concat) {
     }
 
     field (NE69, DBF_ULONG) {
-        prompt ("Num. elememts in 69")
+        prompt ("Num. elements in 69")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2111,7 +2111,7 @@ recordtype (concat) {
     }
 
     field (NE70, DBF_ULONG) {
-        prompt ("Num. elememts in 70")
+        prompt ("Num. elements in 70")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2119,7 +2119,7 @@ recordtype (concat) {
     }
 
     field (NE71, DBF_ULONG) {
-        prompt ("Num. elememts in 71")
+        prompt ("Num. elements in 71")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2127,7 +2127,7 @@ recordtype (concat) {
     }
 
     field (NE72, DBF_ULONG) {
-        prompt ("Num. elememts in 72")
+        prompt ("Num. elements in 72")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2135,7 +2135,7 @@ recordtype (concat) {
     }
 
     field (NE73, DBF_ULONG) {
-        prompt ("Num. elememts in 73")
+        prompt ("Num. elements in 73")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2143,7 +2143,7 @@ recordtype (concat) {
     }
 
     field (NE74, DBF_ULONG) {
-        prompt ("Num. elememts in 74")
+        prompt ("Num. elements in 74")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2151,7 +2151,7 @@ recordtype (concat) {
     }
 
     field (NE75, DBF_ULONG) {
-        prompt ("Num. elememts in 75")
+        prompt ("Num. elements in 75")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2159,7 +2159,7 @@ recordtype (concat) {
     }
 
     field (NE76, DBF_ULONG) {
-        prompt ("Num. elememts in 76")
+        prompt ("Num. elements in 76")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2167,7 +2167,7 @@ recordtype (concat) {
     }
 
     field (NE77, DBF_ULONG) {
-        prompt ("Num. elememts in 77")
+        prompt ("Num. elements in 77")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2175,7 +2175,7 @@ recordtype (concat) {
     }
 
     field (NE78, DBF_ULONG) {
-        prompt ("Num. elememts in 78")
+        prompt ("Num. elements in 78")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2183,7 +2183,7 @@ recordtype (concat) {
     }
 
     field (NE79, DBF_ULONG) {
-        prompt ("Num. elememts in 79")
+        prompt ("Num. elements in 79")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2191,7 +2191,7 @@ recordtype (concat) {
     }
 
     field (NE80, DBF_ULONG) {
-        prompt ("Num. elememts in 80")
+        prompt ("Num. elements in 80")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2199,7 +2199,7 @@ recordtype (concat) {
     }
 
     field (NE81, DBF_ULONG) {
-        prompt ("Num. elememts in 81")
+        prompt ("Num. elements in 81")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2207,7 +2207,7 @@ recordtype (concat) {
     }
 
     field (NE82, DBF_ULONG) {
-        prompt ("Num. elememts in 82")
+        prompt ("Num. elements in 82")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2215,7 +2215,7 @@ recordtype (concat) {
     }
 
     field (NE83, DBF_ULONG) {
-        prompt ("Num. elememts in 83")
+        prompt ("Num. elements in 83")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2223,7 +2223,7 @@ recordtype (concat) {
     }
 
     field (NE84, DBF_ULONG) {
-        prompt ("Num. elememts in 84")
+        prompt ("Num. elements in 84")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2231,7 +2231,7 @@ recordtype (concat) {
     }
 
     field (NE85, DBF_ULONG) {
-        prompt ("Num. elememts in 85")
+        prompt ("Num. elements in 85")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2239,7 +2239,7 @@ recordtype (concat) {
     }
 
     field (NE86, DBF_ULONG) {
-        prompt ("Num. elememts in 86")
+        prompt ("Num. elements in 86")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2247,7 +2247,7 @@ recordtype (concat) {
     }
 
     field (NE87, DBF_ULONG) {
-        prompt ("Num. elememts in 87")
+        prompt ("Num. elements in 87")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2255,7 +2255,7 @@ recordtype (concat) {
     }
 
     field (NE88, DBF_ULONG) {
-        prompt ("Num. elememts in 88")
+        prompt ("Num. elements in 88")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2263,7 +2263,7 @@ recordtype (concat) {
     }
 
     field (NE89, DBF_ULONG) {
-        prompt ("Num. elememts in 89")
+        prompt ("Num. elements in 89")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2271,7 +2271,7 @@ recordtype (concat) {
     }
 
     field (NE90, DBF_ULONG) {
-        prompt ("Num. elememts in 90")
+        prompt ("Num. elements in 90")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2279,7 +2279,7 @@ recordtype (concat) {
     }
 
     field (NE91, DBF_ULONG) {
-        prompt ("Num. elememts in 91")
+        prompt ("Num. elements in 91")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2287,7 +2287,7 @@ recordtype (concat) {
     }
 
     field (NE92, DBF_ULONG) {
-        prompt ("Num. elememts in 92")
+        prompt ("Num. elements in 92")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2295,7 +2295,7 @@ recordtype (concat) {
     }
 
     field (NE93, DBF_ULONG) {
-        prompt ("Num. elememts in 93")
+        prompt ("Num. elements in 93")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2303,7 +2303,7 @@ recordtype (concat) {
     }
 
     field (NE94, DBF_ULONG) {
-        prompt ("Num. elememts in 94")
+        prompt ("Num. elements in 94")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2311,7 +2311,7 @@ recordtype (concat) {
     }
 
     field (NE95, DBF_ULONG) {
-        prompt ("Num. elememts in 95")
+        prompt ("Num. elements in 95")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2319,7 +2319,7 @@ recordtype (concat) {
     }
 
     field (NE96, DBF_ULONG) {
-        prompt ("Num. elememts in 96")
+        prompt ("Num. elements in 96")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2327,7 +2327,7 @@ recordtype (concat) {
     }
 
     field (NE97, DBF_ULONG) {
-        prompt ("Num. elememts in 97")
+        prompt ("Num. elements in 97")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2335,7 +2335,7 @@ recordtype (concat) {
     }
 
     field (NE98, DBF_ULONG) {
-        prompt ("Num. elememts in 98")
+        prompt ("Num. elements in 98")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
@@ -2343,7 +2343,7 @@ recordtype (concat) {
     }
 
     field (NE99, DBF_ULONG) {
-        prompt ("Num. elememts in 99")
+        prompt ("Num. elements in 99")
         promptgroup (GUI_WAVE)
         special (SPC_NOMOD)
         interest (3)
