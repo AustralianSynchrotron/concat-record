@@ -1,9 +1,9 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #5 $
- * $DateTime: 2021/03/21 13:16:47 $
+ * $Revision: #6 $
+ * $DateTime: 2023/03/31 20:00:32 $
  * Last checked in by: $Author: starritt $
  *
- * Copyright (c) 2009-2021  Australian Synchrotron
+ * Copyright (c) 2009-2023  Australian Synchrotron
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ static long fetch_values (concatRecord *prec);
 static void monitor (concatRecord *prec);
 static long do_concat (concatRecord *prec);
 
-#define VERSION         2.1
+#define VERSION         2.2
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -957,10 +957,8 @@ static void monitor (concatRecord * prec)
 static long cvt_dbaddr (DBADDR * paddr)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
-   int j;
 
-   fieldIndex = dbGetFieldIndex (paddr);
+   const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
 
@@ -972,12 +970,12 @@ static long cvt_dbaddr (DBADDR * paddr)
 
    } else if (fieldIndex >= VFIRST && fieldIndex <= VLAST) {
 
-      j = fieldIndex - VFIRST;
-      paddr->pfield = (&prec->v00)[j];
+      const int offset = fieldIndex - VFIRST;
+      paddr->pfield = (&prec->v00)[offset];
 
       /* Must be at least 1 element.
        */
-      paddr->no_elements = MAX (1, (&prec->me00)[j]);
+      paddr->no_elements = MAX (1, (&prec->me00)[offset]);
       paddr->field_type = prec->ftvl;
       paddr->dbr_field_type = paddr->field_type;
       paddr->field_size = dbValueSize (paddr->field_type);
@@ -993,20 +991,18 @@ static long cvt_dbaddr (DBADDR * paddr)
 
 /* -----------------------------------------------------------------------------
  */
-static long get_array_info (DBADDR * paddr, long *no_elements,
-                            long *offset)
+static long get_array_info (DBADDR* paddr, long* no_elements,
+                            long* offset)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
-   int j;
 
-   fieldIndex = dbGetFieldIndex (paddr);
+   const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
       *no_elements = prec->nord;
    } else if (fieldIndex >= VFIRST && fieldIndex <= VLAST) {
-      j = fieldIndex - VFIRST;
-      *no_elements = (&prec->ne00)[j];
+      const int offset = fieldIndex - VFIRST;
+      *no_elements = (&prec->ne00)[offset];
    } else {
       concatError (prec, "get_array_info unexpectedly called for field %s",
                    ((dbFldDes *) paddr->pfldDes)->name);
@@ -1022,16 +1018,14 @@ static long get_array_info (DBADDR * paddr, long *no_elements,
 static long put_array_info (DBADDR * paddr, long nNew)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
-   int j;
 
-   fieldIndex = dbGetFieldIndex (paddr);
+   const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
       prec->nord = LIMIT (nNew, 1, prec->nelm);
    } else if (fieldIndex >= VFIRST && fieldIndex <= VLAST) {
-      j = fieldIndex - VFIRST;
-      (&prec->ne00)[j] = LIMIT (nNew, 1, (&prec->me00)[j]);
+      const int offset = fieldIndex - VFIRST;
+      (&prec->ne00)[offset] = LIMIT (nNew, 1, (&prec->me00)[offset]);
    } else {
       concatError (prec, "put_array_info unexpectedly called for field %s",
                    ((dbFldDes *) paddr->pfldDes)->name);
