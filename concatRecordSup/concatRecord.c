@@ -1,6 +1,6 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #6 $
- * $DateTime: 2023/03/31 20:00:32 $
+ * $Revision: #7 $
+ * $DateTime: 2023/04/14 10:01:04 $
  * Last checked in by: $Author: starritt $
  *
  * Copyright (c) 2009-2023  Australian Synchrotron
@@ -122,7 +122,7 @@ static long fetch_values (concatRecord *prec);
 static void monitor (concatRecord *prec);
 static long do_concat (concatRecord *prec);
 
-#define VERSION         2.2
+#define VERSION         2.3
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -937,7 +937,7 @@ static void monitor (concatRecord * prec)
     */
    monitor_field_pair (prec, prec->nord, &prec->nord, prec->val,
                        &rpvt->mlst.nord, rpvt->mlst.val,
-                       &rpvt->alst.nord, rpvt->mlst.val);
+                       &rpvt->alst.nord, rpvt->alst.val);
 
 
    /* Monitor the input arrays and sizes.
