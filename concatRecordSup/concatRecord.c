@@ -1,6 +1,6 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #7 $
- * $DateTime: 2023/04/14 10:01:04 $
+ * $Revision: #9 $
+ * $DateTime: 2023/09/15 18:21:15 $
  * Last checked in by: $Author: starritt $
  *
  * Copyright (c) 2009-2023  Australian Synchrotron
@@ -285,11 +285,11 @@ static long fetch_one_value (concatRecord *prec, const int j)
     *
     * The advantage of this is we don't make any assumptions about the field type/size.
     */
+   DBLINK *plink = &(&prec->in00)[j];
    const epicsUInt32 max_elements = (&prec->me00)[j];     /* more readable alias */
 
    long nRequst = max_elements;
-   long status = dbGetLink (&(&prec->in00)[j], prec->ftvl,
-                            (&prec->v00)[j], 0, &nRequst);
+   long status = dbGetLink (plink, prec->ftvl, (&prec->v00)[j], 0, &nRequst);
 
    /* For constants and JSON (and others) nRequest is zero, which is why
     * fetch_values () skips over these.
@@ -854,19 +854,18 @@ static long get_control_double (DBADDR * paddr, struct dbr_ctrlDouble *pcd)
  *       defined as DBF_ULONG are decalred as unsigned long in base-3.14.8.2 but
  *       as epicsUInt32 in base-3.14.10
  */
-static void monitor_field_pair (concatRecord * prec, epicsUInt32 number,
+static void monitor_field_pair (concatRecord * prec,
+                                unsigned short monitor_mask,
+                                epicsUInt32 number,
                                 void *number_field, void *value,
                                 epicsUInt32 * mlast_number,
                                 void *mlast_value,
                                 epicsUInt32 * alast_number,
                                 void *alast_value)
 {
-   unsigned short monitor_mask;
    unsigned short number_mask;
    unsigned short value_mask;
    int changed;
-
-   monitor_mask = recGblResetAlarms (prec);
 
    number_mask = monitor_mask;
    value_mask = monitor_mask;
@@ -885,7 +884,7 @@ static void monitor_field_pair (concatRecord * prec, epicsUInt32 number,
 
    } else {
 
-      /* When the number same, need only check the values.
+      /* When the number same, need to check the values.
        */
       changed =
           field_cmp (mlast_value, value, number, prec->ftvl, prec->mdel);
@@ -931,11 +930,19 @@ static void monitor_field_pair (concatRecord * prec, epicsUInt32 number,
 static void monitor (concatRecord * prec)
 {
    concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
+
+   unsigned short monitor_mask;
    int j;
+
+   /* Note we call recGblResetAlarms once per monitor - most important.
+    * See EPICS-129
+    */
+   monitor_mask = recGblResetAlarms(prec);
 
    /* Monitor the main val field and size.
     */
-   monitor_field_pair (prec, prec->nord, &prec->nord, prec->val,
+   monitor_field_pair (prec, monitor_mask,
+                       prec->nord, &prec->nord, prec->val,
                        &rpvt->mlst.nord, rpvt->mlst.val,
                        &rpvt->alst.nord, rpvt->alst.val);
 
@@ -943,7 +950,8 @@ static void monitor (concatRecord * prec)
    /* Monitor the input arrays and sizes.
     */
    for (j = 0; j < NUM_ARGS; j++) {
-      monitor_field_pair (prec, (&prec->ne00)[j],       /*  */
+      monitor_field_pair (prec, monitor_mask,
+                          (&prec->ne00)[j],
                           &(&prec->ne00)[j], (&prec->v00)[j],
                           &rpvt->mlst.number[j], rpvt->mlst.value[j],
                           &rpvt->alst.number[j], rpvt->alst.value[j]);
