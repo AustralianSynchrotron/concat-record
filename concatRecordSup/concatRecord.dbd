@@ -1,6 +1,6 @@
 # $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.dbd $
-# $Revision: #3 $
-# $DateTime: 2023/03/31 20:00:32 $
+# $Revision: #4 $
+# $DateTime: 2023/09/16 13:24:32 $
 # Last checked in by: $Author: starritt $
 #
 # Description
@@ -25,12 +25,6 @@ recordtype (concat) {
         special (SPC_DBADDR)
         pp (TRUE)
         extra ("void * val")
-    }
-
-    field (VERS, DBF_DOUBLE) {
-        prompt ("Code Version")
-        special (SPC_NOMOD)
-        initial ("0")
     }
 
     field (RPVT, DBF_NOACCESS) {

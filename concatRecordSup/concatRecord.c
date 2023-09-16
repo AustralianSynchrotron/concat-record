@@ -1,6 +1,6 @@
 /* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #9 $
- * $DateTime: 2023/09/15 18:21:15 $
+ * $Revision: #10 $
+ * $DateTime: 2023/09/16 13:24:32 $
  * Last checked in by: $Author: starritt $
  *
  * Copyright (c) 2009-2023  Australian Synchrotron
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contact details:
- * andrew.starritt@synchrotron.org.au
+ * andrews@ansto.gov.au
  * 800 Blackburn Road, Clayton, Victoria 3168, Australia.
  *
  * Description:
@@ -31,15 +31,14 @@
  * inputs are required for concatination, then a hierachy of concat records
  * can be used.
  * 
- * Since version 2.1, updated to support json links for input constants.
- * This make the concat record as is incompatible with earlier versions
- * of EPICS base.
+ * Since version 2.1.1, updated to support json links for input constants.
+ * This makes the concat record incompatible with earlier versions of EPICS base.
  *
  * Author: Andrew Starritt
  *
  * Credits:
  * Derived, in part, from aSubRecord.c,v 1.1.2.2 2008/08/15 21:43:52 anj Exp
- * which inturn was derived from genSubRecord.
+ * which in turn was derived from genSubRecord.
  *
  *      Original genSubRecord Author: Andy Foster
  *      aSubRecord Revised by: Andrew Johnson
@@ -122,7 +121,7 @@ static long fetch_values (concatRecord *prec);
 static void monitor (concatRecord *prec);
 static long do_concat (concatRecord *prec);
 
-#define VERSION         2.3
+#define VERSION         "2.1.4"
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -165,7 +164,7 @@ typedef struct concatPrivate {
 
 
 /* Common macro functions.
-*/
+ */
 #define MAX(a, b)           ((a) >= (b) ? (a) : (b))
 #define MIN(a, b)           ((a) <= (b) ? (a) : (b))
 #define LIMIT(x,low,high)   (MAX(low, MIN(x, high)))
@@ -473,8 +472,6 @@ static long init_record_pass0 (concatRecord * prec)
    concatPrivate *rpvt;
    int j;
 
-   prec->vers = VERSION;
-
    /* Allocate memory for this record's private data.
     * Store away the private data for this record into the EPICS record.
     */
@@ -634,6 +631,10 @@ static long init_record_pass1 (concatRecord * prec)
  */
 static long init_record (dbCommon * pCommon, int pass)
 {
+   /* Set the VERSion attribute - this replaces the VERS field.
+    */
+   dbPutAttribute("concat", "VERS", VERSION);
+
    concatRecord* prec = (concatRecord*) pCommon;
 
    long status;
@@ -784,16 +785,9 @@ static long get_units (DBADDR * paddr, char *units)
 static long get_precision (const DBADDR* paddr, long *precision)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
 
-   fieldIndex = dbGetFieldIndex (paddr);
-
-   if (fieldIndex == concatRecordVERS) {
-      *precision = 1;
-   } else {
-      *precision = prec->prec;
-      recGblGetPrec (paddr, precision);
-   }
+   *precision = prec->prec;
+   recGblGetPrec (paddr, precision);
    return 0;
 }                               /* get_precision */
 
