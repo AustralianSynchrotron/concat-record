@@ -6,11 +6,15 @@
 <HTML>
 <HEAD>
 <TITLE>Concat record</TITLE>
+<STYLE type="text/css">
+blue { color : #0060a0;  }
+navy { color : #000080;  }
+</STYLE>
 </HEAD>
 <BODY>
 
-<H1>Concat Record</H1>
-<H1> 1.  Introduction</H1>
+<H1><blue>Concat Record</blue></H1>
+<H1><blue>1. Introduction</blue></H1>
 <HR>
 The concat record is used to perform the concatination of one or more scalar and/or
 array valued Process Variables (PVs) together with scalar constants and json link
@@ -27,25 +31,25 @@ alarm parameters<P>
 monitor parameters<P>
 run-time parameters<P>
 
-<H1> 2.  Scan Parameters</H1>
+<H1><blue>2. Scan Parameters</blue></H1>
 <HR>
 The Concat record has the standard fields for specifying under what circumstances
 the record will be processed. These fields are listed in
-<A HREF=https://wiki-ext.aps.anl.gov/epics/index.php/RRM_3-14_dbCommon#Scan_Fields><EM>1.2 Scan Fields</EM></A>.
-In addition, <A HREF=Recordref-5.html#MARKER-9-2><EM>Scanning Specification, Chapter 1, 1</EM></A>,
-explains how these fields are used.
+<A HREF=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html#Scan-Fields><EM>Scan Fields</EM></A>.
+In addition, 
+<A HREF=https://docs.epics-controls.org/en/latest/process-database/EPICS_Process_Database_Concepts.html#scanning-specification>
+<EM>Scanning Specification</EM></A>, explains how these fields are used.
 Since the Concat record supports no direct interfaces to hardware, it cannot
 be scanned on I/O interrupt, so its SCAN field cannot be <CODE>I/O Intr</CODE>.<P>
 
-<H1> 3.  Read Parameters</H1>
+<H1><blue>3. Read Parameters</blue></H1>
 <HR>
 The read parameters for the Concat record consist of upto 100 input links -- IN00, IN01, IN02, . . . IN99.
 The fields can be database links, channel access links, or scalar constants.
 If they are links, they must specify another record's field or a channel access link.
 If they are constants, they will be initialized with the value they are configured with.
 They cannot be hardware addresses.<P>
-See <A HREF=Recordref-5.html#MARKER-9-11><EM>Address Specification, Chapter 1, 2</EM></A>,
-for information on how to specify database links.<P>
+
 
 When an input link refers to an array, or multi-valued, record the expected size of the
 input is specified in the maximum elements fields ME00, ME01, ME02, . . . ME99.
@@ -74,7 +78,7 @@ data type of the elements.<P>
 </TABLE>
 
 <P>
-<H1> 4.  Operator Display Parameters</H1>
+<H1><blue>4.  Operator Display Parameters</blue></H1>
 <HR>
 These parameters are used to present meaningful data to the operator. These fields
 are used to display VAL and the other parameters of the concat record either
@@ -88,7 +92,7 @@ The EGU string is solely for an operator's sake and does not have to be used.<P>
 The HOPR and LOPR fields only refer to the limits of the VAL fiels.
 PREC controls the precision of the VAL field.
 These fiels are only appliciable when FTVL specifed a numeric type.<P>
-See <A HREF=Recordref-6.html#MARKER-9-1>Chapter 2, <EM>Fields Common to All Record Types</EM></A>,
+See <A HREF=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html><EM>Fields Common to All Record Types</EM></A>,
 for more on the record name (NAME) and description (DESC) fields. <P>
 
 <TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
@@ -104,22 +108,23 @@ for more on the record name (NAME) and description (DESC) fields. <P>
 </TABLE>
 
 <P>
-<H1> 5.  Alarm Parameters</H1>
+<H1><blue>5.  Alarm Parameters</blue></H1>
 <HR>
 The concat record has the alarm parameters common to all record types. <A HREF=Recordref-6.html#MARKER-9-3>
 <EM>Alarm Fields, Chapter 2, 3</EM></A>, lists other fields related to a alarms that are common to all
 record types.<P>
 
 <P>
-<H1> 6.  Monitor Parameters</H1>
+<H1><blue>6.  Monitor Parameters</blue></H1>
 <HR>
 These parameters are used to determine when to send monitors for the value fields.
 The monitors are sent when the any element of the value field exceeds the last monitored
 field by the appropriate deadband, the ADEL for archiver monitors and the MDEL field for
 all other types of monitors. If these fields have a value of zero, everytime the value changes,
 monitors are triggered; if they have a value of -1, everytime the record is scanned,
-monitors are triggered. See <A HREF=Recordref-5.html#MARKER-9-15><EM>Monitor Specification, Chapter 1, 5</EM></A>,
-for a complete explanation of monitors.<P>
+monitors are triggered. See 
+<A HREF=https://docs.epics-controls.org/en/latest/process-database/EPICS_Process_Database_Concepts.html#monitor-specification>
+<EM>Monitor Specification</EM></A>, for a complete explanation of monitors.<P>
 
 <TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
 <TD> &nbsp; ADEL &nbsp; <TD> &nbsp; Archive Deadband &nbsp; <TD> &nbsp; DOUBLE &nbsp; <TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
@@ -127,7 +132,7 @@ for a complete explanation of monitors.<P>
 </TABLE>
 
 <P>
-<H1> 7.  Run-time Parameters</H1>
+<H1><blue>7. Run-time Parameters</blue></H1>
 <HR>
 
 VAL references the array where the cancat record stores its data.<P>
@@ -168,38 +173,38 @@ The actual number of elements retrieved from IN01 in stored in the field NE01, a
 </TABLE>
 
 <P>
-<H1> 8.  Record Support Routines</H1>
+<H1><blue>8.  Record Support Routines</blue></H1>
 <HR>
-<H3> init_record</H3>
+<H3><navy> init_record</navy></H3>
 For each constant input link, the corresponding value field is initialized with the constant value if
 the input link is CONSTANT or a channel access link is created if the input link is PV_LINK.<P>
 
-<H3> process</H3>
+<H3><navy> process</navy></H3>
 See next section.<P>
 
-<H3> special</H3>
+<H3><navy> special</navy></H3>
 TBD<P>
 
-<H3> get_value</H3>
+<H3><navy> get_value</navy></H3>
 Fills in the values of struct valueDes so that they refer to VAL.<P>
 
-<H3> get_units</H3>
+<H3><navy> get_units</navy></H3>
 Retrieves EGU.<P>
 
-<H3> get_precision</H3>
+<H3><navy> get_precision</navy></H3>
 Retrieves PREC.<P>
 
-<H3> get_graphic_double</H3>
+<H3><navy> get_graphic_double</navy></H3>
 Sets the upper display and lower display limits for a field. If the field is VAL, V01 .. V060, the
 limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
 used, else the upper and lower maximum values for the field type will be used.<P>
 
-<H3> get_control_double</H3>
+<H3><navy> get_control_double</navy></H3>
 Sets the upper control and the lower control limits for a field. If the field is VAL, V01 .. V60, the
 limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
 used, else the upper and lower maximum values for the field type will be used.<P>
 
-<H1> 9.  Record Processing</H1>
+<H1><blue> 9.  Record Processing</blue></H1>
 <HR>
 Routine process implements the following algorithm:<P>
 <DL>
