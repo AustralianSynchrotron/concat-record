@@ -24,5 +24,5 @@ any one element of the record exceeds the specified dead-band.
 This is available 
 [here](https://github.com/AustralianSynchrotron/concat-record/blob/master/documentation/concat_record.html).
 
-<font size="-1">Last updated: Sat Sep 16 12:42:54 AEST 2023</font>
+<font size="-1">Last updated: Tue Jan 21 17:20:17 2025</font>
 <br>
