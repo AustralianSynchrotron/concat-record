@@ -1,225 +1,333 @@
 <!-- $File: //ASP/tec/epics/concat/trunk/documentation/concat_record.html $ -->
-<!-- $Revision: #4 $ -->
-<!-- $DateTime: 2023/09/16 13:24:32 $ -->
+<!-- $Revision: #3 $ -->
+<!-- $DateTime: 2023/03/31 20:00:32 $ -->
 <!-- Last checked in by: $Author: starritt $ -->
 <!-- -->
-<HTML>
-<HEAD>
-<TITLE>Concat record</TITLE>
-<STYLE type="text/css">
-blue { color : #0060a0;  }
-navy { color : #000080;  }
-</STYLE>
-</HEAD>
-<BODY>
 
-<H1><blue>Concat Record</blue></H1>
-<H1><blue>1. Introduction</blue></H1>
-<HR>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>Concatination Record (concat)</title>
+
+<style type="text/css">
+
+h1  { color : #006699; }
+
+h2  { color : #006699; }
+
+h3  { color : #006699; }
+
+h4  { color : #002080; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-width: 0;
+  color: inherit;
+}
+
+th {
+  background: #bbbbbb;
+  color: inherit;
+  padding: 0.4ex 1ex;
+  text-align: left;
+}
+
+th A:link, TH A:visited {
+  background: transparent;
+  color: black;
+}
+
+td {
+  margin: 0;
+  padding: 0.4ex 1ex;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Concatination Record (concat)</h1>
+
+<h2>Introduction</h2>
+
 The concat record is used to perform the concatination of one or more scalar and/or
 array valued Process Variables (PVs) together with scalar constants and json link
 constant array values (the later is new since version 2.1).
+<p>
 Array valued PVs may be provided by records such as an aai, a compress, a subArray,
 and/or waveform records and also by other concat records.
+<p>
 The result of this concatination can then be accessed by any CA client and/or
-other records.<P>
-The fields of this record fall into these categories:<P>
-scan parameters<P>
-read parameters<P>
-operator display parameters<P>
-alarm parameters<P>
-monitor parameters<P>
-run-time parameters<P>
+other records.
+<p>
+The fields of this record fall into these categories (described below):<p>
+<ul>
+<li><a href="#scan">scan parameters</a></li>
+<li><a href="#read">read parameters</a></li>
+<li><a href="#display">operator display parameters</a></li>
+<li><a href="#alarm">alarm parameters</a></li>
+<li><a href="#monitor">monitor parameters</a></li>
+<li><a href="#run-time">run-time parameters</a></li>
+</ul>
+<p>
+See also:
+<ul>
+<li><a href="#support">record support routines</a></li>
+<li><a href="#processing">record processing</a></li>
+</ul>
+<p>
 
-<H1><blue>2. Scan Parameters</blue></H1>
-<HR>
-The Concat record has the standard fields for specifying under what circumstances
+<h2 id="scan">Scan Parameters</h2>
+
+The concat record has the standard fields for specifying under what circumstances
 the record will be processed. These fields are listed in
-<A HREF=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html#Scan-Fields><EM>Scan Fields</EM></A>.
+<a href=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html#Scan-Fields><em>Scan Fields</em></A>.
+
 In addition, 
-<A HREF=https://docs.epics-controls.org/en/latest/process-database/EPICS_Process_Database_Concepts.html#scanning-specification>
-<EM>Scanning Specification</EM></A>, explains how these fields are used.
-Since the Concat record supports no direct interfaces to hardware, it cannot
-be scanned on I/O interrupt, so its SCAN field cannot be <CODE>I/O Intr</CODE>.<P>
+<a href=https://docs.epics-controls.org/en/latest/guides/EPICS_Process_Database_Concepts.html#scanning-specification>
+<em>Scanning Specification</em></A>, explains how these fields are used.
 
-<H1><blue>3. Read Parameters</blue></H1>
-<HR>
-The read parameters for the Concat record consist of upto 100 input links -- IN00, IN01, IN02, . . . IN99.
-The fields can be database links, channel access links, or scalar constants.
-If they are links, they must specify another record's field or a channel access link.
+<h2 id="read">Read Parameters</h2>
+
+The read parameters for the concat record are obtained from upto 100 input links: IN00, IN01, IN02, . . . IN99.
+These input fields can be database links, channel access links, scalar constants or json array constants.
+If they are links, they must specify another record's field or be a channel access link.
 If they are constants, they will be initialized with the value they are configured with.
-They cannot be hardware addresses.<P>
-
-
+They cannot be hardware addresses.
+<p>
+See
+<a href=https://docs.epics-controls.org/en/latest/guides/EPICS_Process_Database_Concepts.html#address-specification>
+<em>Address Specification</em></A>,
+for information on how to specify database links.
+<p>
 When an input link refers to an array, or multi-valued, record the expected size of the
 input is specified in the maximum elements fields ME00, ME01, ME02, . . . ME99.
-The default value for scalars and constants is 1, so this need not be specified for these.<P>
-
-The values retrieved from the input links are concatinated and places in an array referenced
-by VAL. (If the INP link is a constant, elements can be placed in the array via dbPuts.)
+<p>
+<a id="note1">The default value when an input is specified is effectively 1</a>, so need not be specified for scalar inputs.
+<p>
+The values retrieved from the input links are concatinated and placed into an array referenced
+by VAL.
 NELM specifies the number of elements that the array will hold, while FTVL specifies the
-data type of the elements.<P>
+data type of the elements.
+<br>
+<br>
 
-<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+<blockquote>
+<table border="1">
+<tr><th>Field<th>Summary<th>Type<th>DCT<th>Default<th>Read<th>Write<th>Mon<th>PP</tr>
+<tr><td> NELM <td> Number of Elements in array <td> ULONG <td>Yes<td>1<td>Yes<td>No<td><td>No</tr>
+<tr><td> FTVL <td> Field Type of Value  <td><a href=https://where-is-this>GBLCHOICE</A><td>Yes<td>STRING<td>Yes<td>No<td><td>No</tr>
+<tr><td> IN00 <td> Input Link 0    <td> INLINK <td>Yes<td>  <td>Yes<td>No<td><td>No</tr>
+<tr><td> IN01 <td> Input Link 1    <td> INLINK <td>Yes<td>  <td>Yes<td>No<td><td>No</tr>
+<tr><td> INxx <td> Input Link xx   <td> INLINK <td>Yes<td>  <td>Yes<td>No<td><td>No</tr>
+<tr><td> IN99 <td> Input Link 99   <td> INLINK <td>Yes<td>  <td>Yes<td>No<td><td>No</tr>
+<tr><td> ME00 <td> Max Elements 0  <td> ULONG  <td>Yes<td> <a href="#note1"> 0 or 1</a> <td>Yes<td>No<td><td>No</tr>
+<tr><td> ME01 <td> Max Elements 1  <td> ULONG  <td>Yes<td> <a href="#note1"> 0 or 1</a> <td>Yes<td>No<td><td>No</tr>
+<tr><td> MExx <td> Max Elements xx <td> ULONG  <td>Yes<td> <a href="#note1"> 0 or 1</a> <td>Yes<td>No<td><td>No</tr>
+<tr><td> ME99 <td> Max Elements 99 <td> ULONG  <td>Yes<td> <a href="#note1"> 0 or 1</a> <td>Yes<td>No<td><td>No</tr>
 
-<TD> &nbsp; NELM &nbsp; <TD> &nbsp; Number of Elements in array &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>Yes<TD>1<TD>Yes<TD>No<TD>No<TD>No<TR>
-<TD> &nbsp; FTVL &nbsp; <TD> &nbsp; Field Type of Value&nbsp; <TD><A HREF=Recordref-44.html#MARKER-9-1>GBLCHOICE</A><TD>Yes<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+</table>
+</blockquote>
 
-<TD> &nbsp; IN00 &nbsp; <TD> &nbsp; Input Link 0    &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; IN01 &nbsp; <TD> &nbsp; Input Link 1    &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; INxx &nbsp; <TD> &nbsp; Input Link xx   &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; IN99 &nbsp; <TD> &nbsp; Input Link 99   &nbsp; <TD> &nbsp; INLINK &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
+<!-- Cribbed from  https://epics.anl.gov/EpicsDocumentation/AppDevManuals/RecordRef/Recordref.pdf
+     Counln't see it in the new documentation.
+-->
+Notes:<br>
+The <b>Field</b>  column contains the literal name of the particular field as it 
+appears in the database.<br>
+The <b>Summary</b> column contains the full name of the field.<br>
+The <b>Type</b>  column gives the EPICS type of the field. These types are defined 
+in the <code>&lt;dbFldTypes.h&gt;</code>.<br>
+The <b>DCT</b>  column indicates whether the field is configurable prior to run-time.<br>
+The <b>Default</b>  (Initial) column contains the default initialization value of the field.<br>
+The <b>Read</b>  (Access) column indicates whether the field can be accessed by the 
+database routines for reading purposes.<br>
+The <b>Write</b>  (Modify) column indicates whether the field can be changed at
+run-time, for example, by the operator.<br>
+The <b>Mon</b>  (Rec Proc Monitor) column indicates whether or not the field is
+monitored at run-time for changes.<br>
+The <b>PP</b>  or process passive column indicates whether writing to this field
+will cause the record to process.<br>
+<p>
 
-<TD> &nbsp; ME00 &nbsp; <TD> &nbsp; Max Elements 0  &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; ME01 &nbsp; <TD> &nbsp; Max Elements 1  &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; MExx &nbsp; <TD> &nbsp; Max Elements xx &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
-<TD> &nbsp; ME99 &nbsp; <TD> &nbsp; Max Elements 99 &nbsp; <TD> &nbsp; ULONG  &nbsp; <TD>Yes<TD>0<TD>No<TD>No<TD>N/A<TD>No<TR>
 
-</TABLE>
+<h2 id="display">Operator Display Parameters</h2>
 
-<P>
-<H1><blue>4.  Operator Display Parameters</blue></H1>
-<HR>
 These parameters are used to present meaningful data to the operator. These fields
 are used to display VAL and the other parameters of the concat record either
-textually or graphically.<P>
-
+textually or graphically.
+<p>
 The EGU field contains a string of up to 16 characters which is supplied by the
 user and which describes the values being operated upon. The string is retrieved
-whenever the routine <CODE>get_units</CODE> is called.
-The EGU string is solely for an operator's sake and does not have to be used.<P>
-
+whenever the routine <code>get_units</code> is called.
+The EGU string is solely for an operator's sake and does not have to be used.
+<p>
 The HOPR and LOPR fields only refer to the limits of the VAL fiels.
 PREC controls the precision of the VAL field.
-These fiels are only appliciable when FTVL specifed a numeric type.<P>
-See <A HREF=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html><EM>Fields Common to All Record Types</EM></A>,
-for more on the record name (NAME) and description (DESC) fields. <P>
+These fields are only appliciable when FTVL specifed a numeric type.<p>
+See 
+<a HREF=https://epics.anl.gov/base/R7-0/4-docs/dbCommonRecord.html>
+<em>Fields Common to All Record Types</em></a>,
+for more on the record name (NAME) and description (DESC) fields.
+<br>
+<br>
 
-<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
-<TD> &nbsp; EGU &nbsp;  <TD> &nbsp; Engineering Units &nbsp;    <TD>STRING [16]<TD>Yes<TD>Null<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+<blockquote>
+<table border="1">
+<tr> <th>Field<th>Summary                <th>Type       <th>DCT<th>Default<th>Read<th>Write<th>Mon<th>PP </tr>
+<tr> <td> EGU  <td> Engineering Units    <td>STRING [16]<td>Yes<td>       <td>Yes <td>Yes  <td>No <td>No </tr>
+<tr> <td> PREC <td> Display Precision    <td>SHORT      <td>Yes<td>0      <td>Yes <td>Yes  <td>No <td>No </tr>
+<tr> <td> HOPR <td> High Operating Range <td>DOUBLE     <td>Yes<td>0.0    <td>Yes <td>Yes  <td>No <td>No </tr>
+<tr> <td> LOPR <td> Low Operating Range  <td>DOUBLE     <td>Yes<td>0.0    <td>Yes <td>Yes  <td>No <td>No </tr>
+<tr> <td> NAME <td> Record Name          <td>STRING [61]<td>Yes<td>       <td>Yes <td>No   <td>No <td>No </tr>
+<tr> <td> DESC <td> Description          <td>STRING [41]<td>Yes<td>       <td>Yes <td>Yes  <td>No <td>No </tr>
+</table>
+</blockquote>
+<br>
 
-<TD> &nbsp; PREC &nbsp; <TD> &nbsp; Display Precision &nbsp;    <TD>SHORT<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
-<TD> &nbsp; HOPR &nbsp; <TD> &nbsp; High Operating Range &nbsp; <TD>DOUBLE<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
+<h2 id="alarm">Alarm Parameters</h2>
 
-<TD> &nbsp; LOPR &nbsp; <TD> &nbsp; Low Operating Range &nbsp;  <TD>DOUBLE<TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
-<TD> &nbsp; NAME &nbsp; <TD> &nbsp; Record Name &nbsp;          <TD>STRING [29]<TD>Yes<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+The concat record has the alarm parameters common to all record types. <a href=Recordref-6.html#MARKER-9-3>
+<em>Alarm Fields, Chapter 2, 3</em></A>, lists other fields related to a alarms that are common to all
+record types.
+<p>
 
-<TD> &nbsp; DESC &nbsp; <TD> &nbsp; Description &nbsp;          <TD>STRING [29]<TD>Yes<TD>Null<TD>Yes<TD>Yes<TD>No<TD>No<TR>
-</TABLE>
+<h2 id="monitor">Monitor Parameters</h2>
 
-<P>
-<H1><blue>5.  Alarm Parameters</blue></H1>
-<HR>
-The concat record has the alarm parameters common to all record types. <A HREF=Recordref-6.html#MARKER-9-3>
-<EM>Alarm Fields, Chapter 2, 3</EM></A>, lists other fields related to a alarms that are common to all
-record types.<P>
-
-<P>
-<H1><blue>6.  Monitor Parameters</blue></H1>
-<HR>
 These parameters are used to determine when to send monitors for the value fields.
 The monitors are sent when the any element of the value field exceeds the last monitored
 field by the appropriate deadband, the ADEL for archiver monitors and the MDEL field for
-all other types of monitors. If these fields have a value of zero, everytime the value changes,
-monitors are triggered; if they have a value of -1, everytime the record is scanned,
-monitors are triggered. See 
-<A HREF=https://docs.epics-controls.org/en/latest/process-database/EPICS_Process_Database_Concepts.html#monitor-specification>
-<EM>Monitor Specification</EM></A>, for a complete explanation of monitors.<P>
+all other types of monitors.
+If these fields have a value of zero, everytime the value changes, monitors are triggered; 
+if they have a value of -1, everytime the record is scanned, monitors are triggered.
+See 
+<a HREF=https://docs.epics-controls.org/en/latest/process-database/EPICS_Process_Database_Concepts.html#monitor-specification>
+<em>Monitor Specification</em></a>, 
+for a complete explanation of monitors.
+<br>
+<br>
 
-<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
-<TD> &nbsp; ADEL &nbsp; <TD> &nbsp; Archive Deadband &nbsp; <TD> &nbsp; DOUBLE &nbsp; <TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
-<TD> &nbsp; MDEL &nbsp; <TD> &nbsp; Monitor Deadband &nbsp; <TD> &nbsp; DOUBLE &nbsp; <TD>Yes<TD>0<TD>Yes<TD>Yes<TD>No<TD>No<TR>
-</TABLE>
+<blockquote>
+<table border="1">
+<tr><th>Field <th> Summary          <th> Type   <th>DCT<th>Default<th>Read<th>Write<th>Mon<th>PP</tr>
+<tr><td> ADEL <td> Archive Deadband <td> DOUBLE <td>Yes<td>0.0    <td>Yes <td>Yes  <td>No <td>No</tr>
+<tr><td> MDEL <td> Monitor Deadband <td> DOUBLE <td>Yes<td>0.0    <td>Yes <td>Yes  <td>No <td>No</tr>
+</table>
+</blockquote>
+<br>
 
-<P>
-<H1><blue>7. Run-time Parameters</blue></H1>
-<HR>
+<h2 id="run-time">Run-time Parameters</h2>
 
-VAL references the array where the cancat record stores its data.<P>
-The NORD field holds a counter of the number of elements that have been read into the array.<P>
+VAL references the array where the cancat record stores its data.<p>
+The NORD field holds a counter of the number of elements that have been read into the array.<p>
 
 The NIEM and RIEM fields control how the concat record deals with missing inputs and/or
 when inputs have less than the expected number of elements. When padding is used to fill
-"missing" elements, the DFNV or DFSV field provide the default value.<P>
+"missing" elements, the DFNV or DFSV field provide the default value.<p>
 
-The concatination process uses the values retrieved from the IN<EM>xx</EM> links.
+The concatination process uses the values retrieved from the INxx links.
 These values retrieved from the input links are stored in the V01, V02, ... V60 fields.
 For instance, the value obtained from the IN01 link is stored in the field V01, and
-the value obtained from INP02 is stored in field V02 etc. etc.
-The actual number of elements retrieved from IN01 in stored in the field NE01, and so on.<P>
+the value obtained from IN02 is stored in field V02 etc.
+The actual number of elements retrieved from IN01 in stored in the field NE01, and so on.
+<br>
+<br>
 
-<TABLE BORDER="1"><TH>Field<TH>Summary<TH>Type<TH>DCT<TH>Initial<TH>Access<TH>Modify<TH>Rec Proc Monitor<TH>PP<TR>
+<blockquote>
+<table border="1">
+<tr><th>Field<th>Summary<th>Type<th>DCT<th>Default<th>Read<th>Write<th>Mon<th>PP</tr>
+<tr><td> VAL  <td> Value Field                    <td> See FTVL   <td>No <td>0<td>Yes<td>Yes<td>Yes<td>Yes</tr>
+<tr><td> NORD <td> Number of Elements Read        <td> ULONG      <td>No <td>0<td>Yes<td>No<td>No<td>No</tr>
+<tr><td> NIEM <td> No input error mode            <td> MENU (<a href="#concatMODE">concatMODE</a>) <td>Yes<td>Fail<td>Yes<td>No<td>No<td>No</tr>
+<tr><td> RIEM <td> Reduced input error mode       <td> MENU (<a href="#concatMODE">concatMODE</a>) <td>Yes<td>Skip<td>Yes<td>No<td>No<td>No</tr>
+<tr><td> DFNV <td> Default pad numeric value      <td> DOUBLE     <td>Yes<td>0.0<td>Yes<td>No<td>No<td>No</tr>
+<tr><td> DFSV <td> Dufault pad string value       <td> STRING[40] <td>Yes<td>   <td>Yes<td>No<td>No<td>No</tr>
+<tr><td> V00  <td> Input Value 0                  <td> See FTVL   <td>No <td> <td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> V01  <td> Input Value 1                  <td> See FTVL   <td>No <td> <td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> Vxx  <td> Input Value xx                 <td> See FTVL   <td>No <td> <td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> V99  <td> Input Value 99                 <td> See FTVL   <td>No <td> <td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> NE00 <td> Number Elements 0              <td> ULONG      <td>No <td>0<td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> NE01 <td> Number Elements 1              <td> ULONG      <td>No <td>0<td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> NExx <td> Number Elements xx             <td> ULONG      <td>No <td>0<td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+<tr><td> NE99 <td> Number Elements 99             <td> ULONG      <td>No <td>0<td>Yes<td>Yes/No<td>Yes<td>Yes</tr>
+</table>
+</blockquote>
+<br>
 
-<TD> &nbsp; VAL &nbsp;  <TD> &nbsp; Value Field &nbsp;                 <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; NORD &nbsp; <TD> &nbsp; Number of Elements Read &nbsp;     <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+<h3 id="concatMODE">Menu concatMODE</h3>
 
-<TD> &nbsp; NIEM &nbsp; <TD> &nbsp; No input error handling &nbsp;     <TD> &nbsp; Fail, Skip, Pad &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
-<TD> &nbsp; RIEM &nbsp; <TD> &nbsp; Reduced input error hadling &nbsp; <TD> &nbsp; Fail, Skip, Pad &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
-<TD> &nbsp; DFNV &nbsp; <TD> &nbsp; Default pad numeric value &nbsp;   <TD> &nbsp; DOUBLE &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
-<TD> &nbsp; DFSV &nbsp; <TD> &nbsp; Dufault pad string value &nbsp;    <TD> &nbsp; STRING &nbsp; <TD>No<TD>0<TD>Yes<TD>No<TD>No<TD>No<TR>
+The NIEM and RIEM fields control how the cocat record handles missing input and reduced input.
+They are menus field that have three choices:
+<br>
+<br>
 
-<TD> &nbsp; V00  &nbsp; <TD> &nbsp; Input Value 0      &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; V01  &nbsp; <TD> &nbsp; Input Value 1      &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; Vxx  &nbsp; <TD> &nbsp; Input Value xx     &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; V99  &nbsp; <TD> &nbsp; Input Value 99     &nbsp; <TD> &nbsp; See FTVL &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<blockquote>
+<table border="1">
+<th>Index<th>Identifier<th>Choice String<tr>
+<td> 0 <td> concatMODE_Fail <td> Fail <tr>
+<td> 1 <td> concatMODE_Skip <td> Skip <tr>
+<td> 2 <td> concatMODE_Pad  <td> Pad  <tr>
+</table>
+</blockquote>
+<p>
+<ul>
+<li><code>Fail</code> -- Record processing fails if input data missing or less than expected.</li>
+<li><code>Skip</code> -- Record processing continues, however this input is ignored.</li>
+<li><code>Pad </code> -- Record processing continues, however missing data is padded with content of DFNV / DFSV.</li>
+</ul>
 
-<!-- <TD> &nbsp; NE00 &nbsp; <TD> &nbsp; Number Elements 0  &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR> -->
-<TD> &nbsp; NE00 &nbsp; <TD> &nbsp; Number Elements 0  &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; NE01 &nbsp; <TD> &nbsp; Number Elements 1  &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; NExx &nbsp; <TD> &nbsp; Number Elements xx &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
-<TD> &nbsp; NE99 &nbsp; <TD> &nbsp; Number Elements 99 &nbsp; <TD> &nbsp; ULONG &nbsp; <TD>No<TD>0<TD>Yes<TD>Yes/No<TD>Yes<TD>Yes<TR>
+<p>
+<h2 id="support">Record Support Routines</h2>
 
-
-</TABLE>
-
-<P>
-<H1><blue>8.  Record Support Routines</blue></H1>
-<HR>
-<H3><navy> init_record</navy></H3>
+<h4> init_record</h4>
 For each constant input link, the corresponding value field is initialized with the constant value if
-the input link is CONSTANT or a channel access link is created if the input link is PV_LINK.<P>
+the input link is CONSTANT or a channel access link is created if the input link is PV_LINK.<p>
 
-<H3><navy> process</navy></H3>
-See next section.<P>
+<h4> process</h4>
+See next section.<p>
 
-<H3><navy> special</navy></H3>
-TBD<P>
+<h4> special</h4>
+TBD<p>
 
-<H3><navy> get_value</navy></H3>
-Fills in the values of struct valueDes so that they refer to VAL.<P>
+<h4> get_value</h4>
+Fills in the values of struct valueDes so that they refer to VAL.<p>
 
-<H3><navy> get_units</navy></H3>
-Retrieves EGU.<P>
+<h4> get_units</h4>
+Retrieves EGU.<p>
 
-<H3><navy> get_precision</navy></H3>
-Retrieves PREC.<P>
+<h4> get_precision</h4>
+Retrieves PREC.<p>
 
-<H3><navy> get_graphic_double</navy></H3>
+<h4> get_graphic_double</h4>
 Sets the upper display and lower display limits for a field. If the field is VAL, V01 .. V060, the
 limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
-used, else the upper and lower maximum values for the field type will be used.<P>
+used, else the upper and lower maximum values for the field type will be used.<p>
 
-<H3><navy> get_control_double</navy></H3>
+<h4> get_control_double</h4>
 Sets the upper control and the lower control limits for a field. If the field is VAL, V01 .. V60, the
 limits are set to HOPR and LOPR, else if the field has upper and lower limits defined they will be
-used, else the upper and lower maximum values for the field type will be used.<P>
+used, else the upper and lower maximum values for the field type will be used.<p>
 
-<H1><blue> 9.  Record Processing</blue></H1>
-<HR>
-Routine process implements the following algorithm:<P>
+<h2 id="processing">Record Processing</h2>
+
+Routine process implements the following algorithm:<p>
 <DL>
-<DT><DD> 1.  Fetch all arguments. Pad inputs with default values if required as per the NIEM and RIEM fields<P>
-<DT><DD> 2.  Call routine do_concat routine which concatinates all inputs into the VAL field.<P>
-
-<DT><DD> 3.  Check to see if monitors should be invoked.<P>
+<DT><DD> 1.  Fetch all arguments. Pad inputs with default values if required as per the NIEM and RIEM fields<p>
+<DT><DD> 2.  Call routine do_concat routine which concatinates all inputs into the VAL field.<p>
+<DT><DD> 3.  Check to see if monitors should be invoked.<p>
 <UL>
-<LI>Alarm monitors are invoked if the alarm status or severity has changed.<P>
-<LI>Archive and value change monitors are invoked if ADEL and MDEL conditions are met.<P>
-<LI>Monitors for V00 ... V99 and NE00 ... NE99 are checked whenever other monitors are invoked.<P>
+<LI>Alarm monitors are invoked if the alarm status or severity has changed.<p>
+<LI>Archive and value change monitors are invoked if ADEL and MDEL conditions are met.<p>
+<LI>Monitors for V00 ... V99 and NE00 ... NE99 are checked whenever other monitors are invoked.<p>
 </UL>
-<DT><DD> 4.  Scan forward link if necessary, set PACT FALSE, and return.<P>
+<DT><DD> 4.  Scan forward link if necessary, set PACT FALSE, and return.<p>
 </DL>
-<P>
+<p>
 
-<HR>
-</BODY>
+<font size="-1">Last updated: Thu Jan 30 17:41:11 2025</font>
+<br>
+</body>
