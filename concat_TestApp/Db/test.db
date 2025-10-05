@@ -1,13 +1,17 @@
-# $File: //ASP/tec/epics/concat/trunk/concat_TestApp/Db/test.db $
-# $Revision: #3 $
-# $DateTime: 2021/03/14 14:49:47 $
-# Last checked in by: $Author: starritt $
+# File: concat_TestApp/Db/test.db
+# DateTime: Sat Oct  4 14:32:56 2025
+# Last checked in by: starritt
 #
 
 record (concat, "CONCAT:T1") {
+    field (DESC, "")
     field (SCAN, "Passive")
-    field (NELM, "20")
+    field (DTYP, "Soft Channel")
+    field (NELM, "24")
     field (FTVL, "DOUBLE")
+
+    field (ADEL, "0.0")
+    field (MDEL, "0.0")
 
     field (NIEM, "Pad")
     field (RIEM, "Pad")
@@ -25,29 +29,53 @@ record (concat, "CONCAT:T1") {
 
     field (IN05, "WF:FIVE CP")
     field (ME05, "5")
+
+    field (OUT,  "WF:RESULT PP")
+    field (OOPT, "On Change")
+    field (OEVT, "Peter")
+}
+
+record (calcout, "EVENT:CALC") {
+    field (DESC, "Event counter")
+    field (SCAN, "Event")
+    field (EVNT, "Peter")
+    field (INPA, "EVENT:CALC")
+    field (CALC, "(A+1)%100")
+    field (HOPR, "100")
+}
+
+record (waveform, "WF:RESULT") {
+    field (DESC, "Result")
+    field (NELM, "24")
+    field (FTVL, "DOUBLE")
+    field (PREC, "2")
 }
 
 record (ai, "SCALAR:ONE") {
+    field (DESC, "Input 1")
     field (VAL,  "1.1")
     field (PREC, "2")
     field (FLNK, "CONCAT:T1")
 }
 
 record (longin, "SCALAR:TWO") {
+    field (DESC, "Input 2 int")
     field (VAL,  "22")
     field (FLNK, "CONCAT:T1")
 }
 
 record (waveform, "WF:FOUR") {
-    field (NELM, "20")
+    field (DESC, "Input 3 double[4]")
+    field (NELM, "4")
     field (FTVL, "DOUBLE")
     field (PREC, "2")
     field (FLNK, "CONCAT:T1")
 }
 
 record (waveform, "WF:FIVE") {
-    field (NELM, "20")
-    field (FTVL, "DOUBLE")
+    field (DESC, "Input 5 float[5]")
+    field (NELM, "5")
+    field (FTVL, "FLOAT")
     field (PREC, "2")
 }
 

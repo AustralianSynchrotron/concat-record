@@ -1,7 +1,6 @@
-# $File: //ASP/tec/epics/concat/trunk/concatRecordSup/Makefile $
-# $Revision: #2 $
-# $DateTime: 2019/07/01 16:27:01 $
-# Last checked in by: $Author: starritt $
+# File: concatRecordSup/Makefile
+# DateTime: Sat Oct  4 14:23:10 2025
+# Last checked in by: starritt
 #
 
 TOP=..
@@ -31,6 +30,7 @@ DBD += concatRecord.dbd
 # specify all source files to be compiled and added to the library
 #
 concatRecord_SRCS += concatRecord.c
+concatRecord_SRCS += devConcatSoft.c
 
 concatRecord_LIBS += $(EPICS_BASE_IOC_LIBS)
 

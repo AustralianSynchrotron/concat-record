@@ -1,7 +1,6 @@
-# $File: //ASP/tec/epics/concat/trunk/concat_TestApp/src/Makefile $
-# $Revision: #1 $
-# $DateTime: 2016/01/07 16:32:58 $
-# Last checked in by: $Author: pozara $
+# File: concat_TestApp/src/Makefile
+# DateTime: Sun Oct  5 11:52:45 2025
+# Last checked in by: starritt
 #
 TOP=../..
 

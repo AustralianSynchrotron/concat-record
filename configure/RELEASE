@@ -1,7 +1,6 @@
-# $File: //ASP/tec/epics/concat/trunk/configure/RELEASE $
-# $Revision: #4 $
-# $DateTime: 2019/10/11 17:16:06 $
-# Last checked in by: $Author: starritt $
+# File: configure/RELEASE
+# DateTime: Sun Oct  5 11:42:17 2025
+# Last checked in by: starritt
 #
 #RELEASE Location of external products
 # Run "gnumake clean uninstall install" in the application

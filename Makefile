@@ -1,7 +1,6 @@
-# $File: //ASP/tec/epics/concat/trunk/Makefile $
-# $Revision: #2 $
-# $DateTime: 2020/10/31 16:04:52 $
-# Last checked in by: $Author: starritt $
+# File: Makefile
+# DateTime: Sun Oct  5 11:42:17 2025
+# Last checked in by: starritt
 #
 
 # Makefile at top of application tree

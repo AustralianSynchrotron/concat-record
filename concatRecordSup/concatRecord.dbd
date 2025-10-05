@@ -1,23 +1,40 @@
-# $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.dbd $
-# $Revision: #4 $
-# $DateTime: 2023/09/16 13:24:32 $
-# Last checked in by: $Author: starritt $
+# File: concatRecordSup/concatRecord.dbd
+# DateTime: Sat Oct  4 14:23:29 2025
+# Last checked in by: starritt
 #
 # Description
 # Concat record dbd definition.
 #
 
-# Action taken if/when input links are missing.
+# Action taken if/when input links/values are missing.
 #
 menu (concatMODE) {
     choice (concatMODE_Fail, "Fail")
     choice (concatMODE_Skip, "Skip")
-    choice (concatMODE_Pad, "Pad")
+    choice (concatMODE_Pad,  "Pad")
+}
+
+# On_Change driven by the monitor post which itself driven by MDEL.
+#
+menu (concatOOPT) {
+    choice (concatOOPT_Every_Time, "Every Time")
+    choice (concatOOPT_On_Change,  "On Change")
+    choice (concatOOPT_Never,      "Never")
 }
 
 recordtype (concat) {
 
     include "dbCommon.dbd"
+
+    %
+    %/* Declare Device Support Entry Table */
+    %struct concatRecord;
+    %typedef struct concatdset {
+    %    dset common;
+    %    long (*write)(struct concatRecord *prec);
+    %} concatdset;
+    %#define HAS_concatdset
+    %
 
     field (VAL,  DBF_NOACCESS) {
         prompt ("Value")
@@ -80,8 +97,8 @@ recordtype (concat) {
         interest (1)
     }
 
-    # ADEL/MDEL applies to VAL field and Vxx fields
-    #
+    # ADEL/MDEL applies to the VAL field and the Vxx fields
+    # 
     field (ADEL, DBF_DOUBLE) {
         prompt ("Archive Deadband")
         promptgroup (GUI_DISPLAY)
@@ -136,6 +153,38 @@ recordtype (concat) {
         interest (2)
         size (40)
         pp (TRUE)
+    }
+
+    # Output related
+    #
+    field (OOPT, DBF_MENU) {
+        prompt("Output Execute Opt")
+        promptgroup("50 - Output")
+        interest(1)
+        menu(concatOOPT)
+    }
+
+    field (OUT, DBF_OUTLINK) {
+        prompt("Output Specification")
+        special(SPC_MOD)
+        promptgroup("50 - Output")
+        interest(1)
+    }
+
+    field (OEVT, DBF_STRING) {
+        prompt("Event To Issue")
+        promptgroup("30 - Action")
+        special(SPC_MOD)
+        asl(ASL0)
+        size(40)
+    }
+
+    %#include "dbScan.h"
+    field (EPVT, DBF_NOACCESS) {
+        prompt("Event private")
+        special(SPC_NOMOD)
+        interest(4)
+        extra("EVENTPVT epvt")
     }
 
     # IN00 through IN99 must be contiguous
@@ -3145,7 +3194,11 @@ recordtype (concat) {
         interest (2)
         extra ("void *v99")
     }
-
 }
+
+# This (or should be) the default.
+#
+device (concat, CONSTANT, devConcatSoft, "Soft Channel")
+device (concat, CONSTANT, devConcatSoftCallback, "Async Soft Channel")
 
 # end

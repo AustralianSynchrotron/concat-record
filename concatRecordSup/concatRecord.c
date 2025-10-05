@@ -1,14 +1,12 @@
-/* $File: //ASP/tec/epics/concat/trunk/concatRecordSup/concatRecord.c $
- * $Revision: #10 $
- * $DateTime: 2023/09/16 13:24:32 $
- * Last checked in by: $Author: starritt $
+/* File: concatRecordSup/concatRecord.c
+ * DateTime: Sat Oct  4 14:23:29 2025
+ * Last checked in by: starritt
  *
- * Copyright (c) 2009-2023  Australian Synchrotron
+ * Copyright (c) 2009-2025  Australian Synchrotron
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,29 +26,36 @@
  * other concat records) into an array record.
  *
  * The record can specify upto 100 inputs (IN00 to IN99).  If more than 100
- * inputs are required for concatination, then a hierachy of concat records
+ * values are required for concatination, then a hierachy of concat records
  * can be used.
- * 
- * Since version 2.1.1, updated to support json links for input constants.
- * This makes the concat record incompatible with earlier versions of EPICS base.
+ *
+ * Since version 2.1, updated to support json links for input constants.
+ * This make the concat record as is incompatible with earlier versions
+ * of EPICS base.
  *
  * Author: Andrew Starritt
  *
  * Credits:
  * Derived, in part, from aSubRecord.c,v 1.1.2.2 2008/08/15 21:43:52 anj Exp
- * which in turn was derived from genSubRecord.
+ * which inturn was derived from genSubRecord.
  *
  *      Original genSubRecord Author: Andy Foster
  *      aSubRecord Revised by: Andrew Johnson
  *
+ * Also cribbed output handlining from the calcout record.
+ *
+ *      Author : Ned Arnold
+ *      Based on recCalc.c by Julie Sander and Bob Dalesio
  */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdarg.h>
 
 #include "alarm.h"
+#include "callback.h"
 #include "cantProceed.h"
 #include "dbDefs.h"
 #include "dbEvent.h"
@@ -77,7 +82,7 @@
 #define initialize          NULL
 static long init_record (dbCommon *, int);
 static long process (dbCommon *);
-#define special             NULL
+static long special (DBADDR *, int);
 #define get_value           NULL
 static long cvt_dbaddr (DBADDR *);
 static long get_array_info (DBADDR *, long *, long *);
@@ -118,10 +123,14 @@ static long init_record_pass0 (concatRecord *prec);
 static long init_record_pass1 (concatRecord *prec);
 
 static long fetch_values (concatRecord *prec);
+static bool is_output_required (concatRecord *prec);
 static void monitor (concatRecord *prec);
+static void execOutput (concatRecord *prec);
+static long writeValue (concatRecord *prec);
 static long do_concat (concatRecord *prec);
 
-#define VERSION         "2.1.4"
+
+#define VERSION         "3.1.1"
 #define NUM_ARGS        100
 
 /* Define first and last attribute type macros
@@ -146,16 +155,17 @@ static long do_concat (concatRecord *prec);
 /* Last/previous values so that we can post/monitor these.
  */
 struct state_data {
-   epicsUInt32 nord;                /* Actual number elements */
-   void *val;                       /* Value */
-   epicsUInt32 number[NUM_ARGS];    /* Num. elements in NExx */
-   void *value[NUM_ARGS];           /* Input value Vxx */
+   epicsUInt32 nord;                   /* Actual number elements */
+   void *val;                          /* Value */
+   epicsUInt32 inputNumber[NUM_ARGS];  /* Num. elements in NExx */
+   void *inputValues[NUM_ARGS];        /* Input value Vxx */
 };
 
 
 typedef struct concatPrivate {
    /* Effective number of elements per input including padding.
     * Can be different to the NExx values.
+    * A reference to this is held in prec->rpvt
     */
    epicsUInt32 number_available[NUM_ARGS];
    struct state_data alst;      /* Last archived values */
@@ -164,7 +174,7 @@ typedef struct concatPrivate {
 
 
 /* Common macro functions.
- */
+*/
 #define MAX(a, b)           ((a) >= (b) ? (a) : (b))
 #define MIN(a, b)           ((a) <= (b) ? (a) : (b))
 #define LIMIT(x,low,high)   (MAX(low, MIN(x, high)))
@@ -199,7 +209,7 @@ static void pad_input (concatRecord *prec, const int j, const int i)
 {
    void *input;
 
-/* Generic code must be defined as a macro.
+   /* Generic code must be defined as a macro.
  */
 #define NUMERIC_PAD(type)               \
 {                                       \
@@ -259,7 +269,7 @@ static void pad_input (concatRecord *prec, const int j, const int i)
          break;
 
       default:
-         concatError (prec, "pad_input %02d [%d] - unexpected FTVL %d", 
+         concatError (prec, "pad_input %02d [%d] - unexpected FTVL %d",
                       j, i, prec->ftvl);
          break;
    }
@@ -284,11 +294,11 @@ static long fetch_one_value (concatRecord *prec, const int j)
     *
     * The advantage of this is we don't make any assumptions about the field type/size.
     */
-   DBLINK *plink = &(&prec->in00)[j];
    const epicsUInt32 max_elements = (&prec->me00)[j];     /* more readable alias */
 
    long nRequst = max_elements;
-   long status = dbGetLink (plink, prec->ftvl, (&prec->v00)[j], 0, &nRequst);
+   long status = dbGetLink (&(&prec->in00)[j], prec->ftvl,
+                            (&prec->v00)[j], 0, &nRequst);
 
    /* For constants and JSON (and others) nRequest is zero, which is why
     * fetch_values () skips over these.
@@ -373,15 +383,13 @@ static long fetch_one_value (concatRecord *prec, const int j)
 
 
 /* -----------------------------------------------------------------------------
- * Returns TRUE if any element delta exceeds del (if numeric) otherwise
- * returns TRUE if different.
+ * Returns true if any element delta exceeds deadband (if numeric) otherwise
+ * returns true if different.
  */
-static int field_cmp (const void *s1, const void *s2, const int num,
-                      const epicsEnum16 ftvl, const double del)
+static bool field_compare (const void *s1, const void *s2, const int num,
+                           const epicsEnum16 ftvl, const double deadband)
 {
-   int result;
-   int j;
-   double delta;
+   bool result;
    size_t size;
 
 /* Generic compare code must be defined as a macro
@@ -390,14 +398,15 @@ static int field_cmp (const void *s1, const void *s2, const int num,
 {                                       \
    type *t1 = (type *) s1;              \
    type *t2 = (type *) s2;              \
-   result = FALSE;                      \
+   result = false;                      \
+   int j;                               \
    for (j = 0; j < num; j++) {          \
-      delta = t1[j] - t2[j];            \
+      double delta = t1[j] - t2[j];     \
       if (delta < 0.0) {                \
          delta = -delta;                \
       }                                 \
-      if (delta > del) {                \
-         result = TRUE;                 \
+      if (delta > deadband) {           \
+         result = true;                 \
          break;                         \
       }                                 \
    }                                    \
@@ -444,7 +453,7 @@ static int field_cmp (const void *s1, const void *s2, const int num,
       default:
          size = (size_t) num *dbValueSize (ftvl);
          result = memcmp (s1, s2, size);
-         result = result != 0 ? TRUE : FALSE;
+         result = result != 0 ? true : false;
    }
 
    return result;
@@ -472,11 +481,13 @@ static long init_record_pass0 (concatRecord * prec)
    concatPrivate *rpvt;
    int j;
 
+///   prec->vers = VERSION;
+
    /* Allocate memory for this record's private data.
     * Store away the private data for this record into the EPICS record.
     */
    rpvt = (concatPrivate *) callocMustSucceed
-       (1, sizeof (concatPrivate), "concatRecord::init_record_pass0");
+         (1, sizeof (concatPrivate), "concatRecord::init_record_pass0");
 
    prec->rpvt = rpvt;
 
@@ -494,18 +505,18 @@ static long init_record_pass0 (concatRecord * prec)
    const size_t size = dbValueSize (prec->ftvl);
 
    prec->val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
+         callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    prec->nord = 0;
 
    rpvt->mlst.val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
+         callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    rpvt->mlst.nord = 0;
 
    rpvt->alst.val =
-       callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
+         callocMustSucceed (prec->nelm, size, "concatRecord::init_record_pass0");
    rpvt->alst.nord = 0;
 
-   /* Allocate memory for input arrays.
+   /* Allocate memory for the input arrays.
     *
     * Determine max num of input elements
     */
@@ -529,18 +540,18 @@ static long init_record_pass0 (concatRecord * prec)
       }
 
       (&prec->v00)[j] =
-          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
+            callocMustSucceed (count, size, "concatRecord::init_record_pass0");
       (&prec->ne00)[j] = 0;
 
       rpvt->number_available[j] = 0;
 
-      rpvt->mlst.value[j] =
-          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
-      rpvt->mlst.number[j] = 0;
+      rpvt->mlst.inputValues[j] =
+            callocMustSucceed (count, size, "concatRecord::init_record_pass0");
+      rpvt->mlst.inputNumber[j] = 0;
 
-      rpvt->alst.value[j] =
-          callocMustSucceed (count, size, "concatRecord::init_record_pass0");
-      rpvt->alst.number[j] = 0;
+      rpvt->alst.inputValues[j] =
+            callocMustSucceed (count, size, "concatRecord::init_record_pass0");
+      rpvt->alst.inputNumber[j] = 0;
    }
 
    return 0;
@@ -552,70 +563,87 @@ static long init_record_pass0 (concatRecord * prec)
 static long init_record_pass1 (concatRecord * prec)
 {
    concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
+   concatdset *pconcatDSET = (concatdset*) prec->dset;
 
-   int status = 0;
-   int j;
+   if (!pconcatDSET) {
+      recGblRecordError(S_dev_noDSET, (void *)prec, "concat:init_record");
+      return S_dev_noDSET;
+   }
+
+   /* must have write defined */
+   if ((pconcatDSET->common.number < 5) || (pconcatDSET->write == NULL)) {
+      recGblRecordError(S_dev_missingSup, (void *)prec, "concat:init_record");
+      return S_dev_missingSup;
+   }
 
    /* Initialize Input Links
     */
+   int status = 0;
    int total = 0;
+   int j;
    for (j = 0; j < NUM_ARGS; j++) {
-       struct link *plink = &(&prec->in00)[j];
-       short dbr = prec->ftvl;
-       long n = (&prec->me00)[j];
+      struct link *plink = &(&prec->in00)[j];
+      short dbr = prec->ftvl;
+      long n = (&prec->me00)[j];
 
-       /* The ME00, ME01 ... ME99 fields default to 0.
+      /* The ME00, ME01 ... ME99 fields default to 0.
         * If these values are 0 and there is anything in the input link, then set
         * to 1 (as opposed to defaulting to 1 and ignoring when link is empty).
         */
-       switch (plink->type) {
+      switch (plink->type) {
 
-          case CONSTANT:
-             if ((n == 0) && plink->value.constantStr) {
-                n = 1;
-             }
-             break;
+         case CONSTANT:
+            if ((n == 0) && plink->value.constantStr) {
+               n = 1;
+            }
+            break;
 
-          case JSON_LINK:
-             if ((n == 0) && plink->value.json.string) {
-                n = 1;
-             }
-             break;
+         case JSON_LINK:
+            if ((n == 0) && plink->value.json.string) {
+               n = 1;
+            }
+            break;
 
-          case PV_LINK:
-          case CA_LINK:
-          case DB_LINK:
-             if (n == 0) {
-                n = 1;
-             }
-             break;
+         case PV_LINK:
+         case CA_LINK:
+         case DB_LINK:
+            if (n == 0) {
+               n = 1;
+            }
+            break;
 
-          default:
-             n = 0;
-             rpvt->number_available[j] = 0;
-             recGblRecordError (S_db_badField, (void *) prec,
-                                "concatRecord(init_record) Illegal INPUT LINK");
-             status = S_db_badField;
-             break;
-       }
+         default:
+            n = 0;
+            rpvt->number_available[j] = 0;
+            recGblRecordError (S_db_badField, (void *) prec,
+                               "concatRecord(init_record) Illegal INPUT LINK");
+            status = S_db_badField;
+            break;
+      }
 
-       /* ... and update the MExx field
+      /* ... and update the MExx field
         */
-       (&prec->me00)[j]= n;
+      (&prec->me00)[j]= n;
 
-       dbLoadLinkArray(plink, dbr, (&prec->v00)[j], &n);
-       if (n > 0) {
-           (&prec->ne00)[j] = n;
-           rpvt->number_available[j] = n;
-       }
+      dbLoadLinkArray(plink, dbr, (&prec->v00)[j], &n);
+      if (n > 0) {
+         (&prec->ne00)[j] = n;
+         rpvt->number_available[j] = n;
+      }
 
-       total += (&prec->me00)[j];
+      total += (&prec->me00)[j];
    }                            /* loop */
 
    if (total > prec->nelm) {
       concatError
-          (prec, "warning: sum of max MEnn values (%d) exceeds allocated (NELM=%d) size",
-           total, prec->nelm);
+            (prec, "warning: sum of max MEnn values (%d) exceeds allocated (NELM=%d) size",
+             total, prec->nelm);
+   }
+
+   prec->epvt = eventNameToHandle (prec->oevt);
+
+   if (pconcatDSET->common.init_record) {
+      pconcatDSET->common.init_record (prec);
    }
 
    prec->udf = TRUE;
@@ -635,7 +663,7 @@ static long init_record (dbCommon * pCommon, int pass)
     */
    dbPutAttribute("concat", "VERS", VERSION);
 
-   concatRecord* prec = (concatRecord*) pCommon;
+   concatRecord *prec = (concatRecord*) pCommon;
 
    long status;
 
@@ -661,23 +689,63 @@ static long init_record (dbCommon * pCommon, int pass)
  */
 static long process (dbCommon * pCommon)
 {
-   concatRecord* prec = (concatRecord*) pCommon;
+   concatRecord *prec = (concatRecord*) pCommon;
 
-   long status;
+   const unsigned char pact = prec->pact;
 
-   prec->pact = TRUE;
+   if (!prec->pact) {
+      prec->pact = TRUE;
 
-   status = fetch_values (prec);
-   if (!status) {
-      status = do_concat (prec);
+      long status = fetch_values (prec);
+      if (!status) {
+         status = do_concat (prec);
+      }
+
+      /* checking for alarms is n/a, there is no HIHI, LOLO etc. */
+
+      if (!pact) {
+         /* Update the timestamp before writing output values so it
+          * will be up to date if any downstream records fetch it via TSEL.
+          */
+         recGblGetTimeStamp (prec);
+      }
+
+      /* Check for output link execution
+       */
+      bool doOutput;
+      switch (prec->oopt) {
+         case concatOOPT_Every_Time:
+            doOutput = true;
+            break;
+         case concatOOPT_On_Change:
+            doOutput = is_output_required (prec);
+            break;
+         case concatOOPT_Never:
+            doOutput = false;
+            break;
+         default:
+            doOutput = false; /* unknown state */
+            break;
+      }
+
+      if (doOutput) {
+         /* Unlike calcout, there is no delay option .... yet.
+          */
+         prec->pact = FALSE;
+         execOutput (prec);
+         if (prec->pact) return 0;
+         prec->pact = TRUE;
+      }
    }
+   else { /* pact == TRUE */
+      /* Update timestamp again for asynchronous devices \
+       */
+      recGblGetTimeStamp (prec);
 
-   /* Set time stamp.
-    */
-   recGblGetTimeStamp (prec);
-
-   /* TODO: check for alarms.
-    */
+      /* Device Support is asynchronous
+       */
+      writeValue (prec);
+   }
 
    /* Check event list.
     */
@@ -692,6 +760,25 @@ static long process (dbCommon * pCommon)
    return 0;
 }                               /* process */
 
+/* -----------------------------------------------------------------------------
+ */
+static long special (DBADDR *paddr, int after)
+{
+   concatRecord *prec = (concatRecord *)paddr->precord;
+   const int fieldIndex = dbGetFieldIndex (paddr);
+
+   if (!after) return 0;
+
+   switch (fieldIndex) {
+      case concatRecordOEVT:
+         prec->epvt = eventNameToHandle (prec->oevt);
+         return 0;
+
+      default:
+         recGblDbaddrError (S_db_badChoice, paddr, "calc: special");
+         return (S_db_badChoice);
+   }
+}                               /* special */
 
 /* -----------------------------------------------------------------------------
  */
@@ -771,7 +858,39 @@ static long do_concat (concatRecord * prec)
 
 /* -----------------------------------------------------------------------------
  */
-static long get_units (DBADDR * paddr, char *units)
+static void execOutput (concatRecord *prec)
+{
+   if (prec->udf) {
+      recGblSetSevr (prec, UDF_ALARM, prec->udfs);
+   }
+
+   writeValue(prec);
+
+   /* post output event if set */
+   if (prec->epvt) postEvent (prec->epvt);
+}                               /* execOutput */
+
+/* -----------------------------------------------------------------------------
+ */
+static long writeValue (concatRecord *prec)
+{
+   concatdset* pconcatDSET = (concatdset *)prec->dset;
+
+   if (!pconcatDSET || !pconcatDSET->write) {
+      errlogPrintf("%s DSET write does not exist\n", prec->name);
+      recGblSetSevrMsg (prec, SOFT_ALARM, INVALID_ALARM, "DSET write does not exist");
+      prec->pact = TRUE;
+      return (-1);
+   }
+
+   long status = pconcatDSET->write (prec);
+   return status;
+}                               /* writeValue */
+
+
+/* -----------------------------------------------------------------------------
+ */
+static long get_units (DBADDR *paddr, char *units)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
 
@@ -794,12 +913,10 @@ static long get_precision (const DBADDR* paddr, long *precision)
 
 /* -----------------------------------------------------------------------------
  */
-static long get_graphic_double (DBADDR * paddr, struct dbr_grDouble *pgd)
+static long get_graphic_double (DBADDR *paddr, struct dbr_grDouble *pgd)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
-
-   fieldIndex = dbGetFieldIndex (paddr);
+   const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL ||
        fieldIndex == concatRecordLOPR ||
@@ -819,12 +936,10 @@ static long get_graphic_double (DBADDR * paddr, struct dbr_grDouble *pgd)
 
 /* -----------------------------------------------------------------------------
  */
-static long get_control_double (DBADDR * paddr, struct dbr_ctrlDouble *pcd)
+static long get_control_double (DBADDR *paddr, struct dbr_ctrlDouble *pcd)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-   int fieldIndex;
-
-   fieldIndex = dbGetFieldIndex (paddr);
+   const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL ||
        (fieldIndex >= VFIRST && fieldIndex <= VLAST)) {
@@ -839,27 +954,45 @@ static long get_control_double (DBADDR * paddr, struct dbr_ctrlDouble *pcd)
    return 0;
 }                               /* get_control_double */
 
+/* -----------------------------------------------------------------------------
+ * This checks if the VALue has changes sufficiently to warrent wrting to OUT.
+ * This gets replicated somewhat in monitor/monitor_field_pair, at least
+ * for the VAL field. Maybe we can refactor the code and or cache the result.
+ */
+static bool is_output_required (concatRecord *prec)
+{
+   concatPrivate* rpvt = (concatPrivate *) prec->rpvt;
+   bool changed;
+
+   /* If no. elements has changed, then we do an updated.
+    */
+   if (rpvt->mlst.nord != prec->nord) return true;
+
+   /* No. of elements unchanged - do an element by element comparison.
+    */
+   changed = field_compare (rpvt->mlst.val, prec->val, prec->nord,
+                            prec->ftvl, prec->mdel);
+   return changed;
+}
 
 /* -----------------------------------------------------------------------------
  * Monitor field pairs - lengths and values.
  *
- * Note: we pass the number as number and as an address so that we avoid warnings
- *       and possible errors on 64 bit builds. This is because the nord field is
- *       defined as DBF_ULONG are decalred as unsigned long in base-3.14.8.2 but
- *       as epicsUInt32 in base-3.14.10
+ * Note: we no longer pass number as the address of the number field separately,
+ *       as we no longe support older version of epics base.
  */
 static void monitor_field_pair (concatRecord * prec,
-                                unsigned short monitor_mask,
-                                epicsUInt32 number,
-                                void *number_field, void *value,
-                                epicsUInt32 * mlast_number,
-                                void *mlast_value,
-                                epicsUInt32 * alast_number,
-                                void *alast_value)
+                                epicsUInt32 * number_field, void *value_field,
+                                epicsUInt32 * mlast_number, void *mlast_value,
+                                epicsUInt32 * alast_number, void *alast_value)
 {
+   const epicsUInt32 number = *number_field;
+   unsigned short monitor_mask;
    unsigned short number_mask;
    unsigned short value_mask;
-   int changed;
+   bool changed;
+
+   monitor_mask = recGblResetAlarms (prec);   /* DBE_ALARM if applicable ?? */
 
    number_mask = monitor_mask;
    value_mask = monitor_mask;
@@ -868,22 +1001,22 @@ static void monitor_field_pair (concatRecord * prec,
     */
    if (*mlast_number != number) {
 
-      /* When the number changes then the value implicitly changes
+      /* When the number of elements changes then the value implicitly changes
        */
       *mlast_number = number;
-      field_copy (mlast_value, value, number, prec->ftvl);
+      field_copy (mlast_value, value_field, number, prec->ftvl);
 
       number_mask |= DBE_VALUE;
-      value_mask |= DBE_VALUE;
+      value_mask  |= DBE_VALUE;
 
    } else {
 
-      /* When the number same, need to check the values.
+      /* When the number is the same, need only check the values.
        */
-      changed =
-          field_cmp (mlast_value, value, number, prec->ftvl, prec->mdel);
+      changed = field_compare (mlast_value, value_field, number,
+                               prec->ftvl, prec->mdel);
       if (changed) {
-         field_copy (mlast_value, value, number, prec->ftvl);
+         field_copy (mlast_value, value_field, number, prec->ftvl);
          value_mask |= DBE_VALUE;
       }
    }
@@ -893,73 +1026,61 @@ static void monitor_field_pair (concatRecord * prec,
    if (*alast_number != number) {
 
       *alast_number = number;
-      field_copy (alast_value, value, number, prec->ftvl);
+      field_copy (alast_value, value_field, number, prec->ftvl);
 
-      number_mask |= DBE_LOG;
-      value_mask |= DBE_LOG;
+      number_mask |= DBE_ARCHIVE;
+      value_mask  |= DBE_ARCHIVE;
 
    } else {
 
-      changed =
-          field_cmp (alast_value, value, number, prec->ftvl, prec->adel);
+      /* When the number is the same, need only check the values.
+       */
+      changed = field_compare (alast_value, value_field, number,
+                               prec->ftvl, prec->adel);
       if (changed) {
-         field_copy (alast_value, value, number, prec->ftvl);
-         value_mask |= DBE_LOG;
+         field_copy (alast_value, value_field, number, prec->ftvl);
+         value_mask |= DBE_ARCHIVE;
       }
    }
 
-   if (number_mask) {
+   /* Now post the monitor and log (archive) events.
+    */
+   if (number_mask != 0) {
       db_post_events (prec, number_field, number_mask);
    }
 
-   if (value_mask) {
-      db_post_events (prec, value, value_mask);
+   if (value_mask != 0) {
+      db_post_events (prec, value_field, value_mask);
    }
-
 }                               /* monitor_field_pair */
-
 
 /* -----------------------------------------------------------------------------
  */
 static void monitor (concatRecord * prec)
 {
    concatPrivate *rpvt = (concatPrivate *) prec->rpvt;
-
-   unsigned short monitor_mask;
    int j;
 
-   /* Note we call recGblResetAlarms once per monitor - most important.
-    * See EPICS-129
+   /* Monitor the main VALue field and size.
     */
-   monitor_mask = recGblResetAlarms(prec);
-
-   /* Monitor the main val field and size.
-    */
-   monitor_field_pair (prec, monitor_mask,
-                       prec->nord, &prec->nord, prec->val,
+   monitor_field_pair (prec, &prec->nord, prec->val,
                        &rpvt->mlst.nord, rpvt->mlst.val,
                        &rpvt->alst.nord, rpvt->alst.val);
-
 
    /* Monitor the input arrays and sizes.
     */
    for (j = 0; j < NUM_ARGS; j++) {
-      monitor_field_pair (prec, monitor_mask,
-                          (&prec->ne00)[j],
-                          &(&prec->ne00)[j], (&prec->v00)[j],
-                          &rpvt->mlst.number[j], rpvt->mlst.value[j],
-                          &rpvt->alst.number[j], rpvt->alst.value[j]);
+      monitor_field_pair (prec, &(&prec->ne00)[j], (&prec->v00)[j],
+                          &rpvt->mlst.inputNumber[j], rpvt->mlst.inputValues[j],
+                          &rpvt->alst.inputNumber[j], rpvt->alst.inputValues[j]);
    }
-
 }                               /* monitor */
-
 
 /* -----------------------------------------------------------------------------
  */
-static long cvt_dbaddr (DBADDR * paddr)
+static long cvt_dbaddr (DBADDR *paddr)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-
    const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
@@ -997,7 +1118,6 @@ static long get_array_info (DBADDR* paddr, long* no_elements,
                             long* offset)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-
    const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
@@ -1017,10 +1137,9 @@ static long get_array_info (DBADDR* paddr, long* no_elements,
 
 /* -----------------------------------------------------------------------------
  */
-static long put_array_info (DBADDR * paddr, long nNew)
+static long put_array_info (DBADDR *paddr, long nNew)
 {
    concatRecord *prec = (concatRecord *) paddr->precord;
-
    const int fieldIndex = dbGetFieldIndex (paddr);
 
    if (fieldIndex == concatRecordVAL) {
