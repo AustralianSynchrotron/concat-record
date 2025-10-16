@@ -30,7 +30,17 @@ See also:
 
 ## <span style='color:#f00000'>License</span>
 
-The concat record is released under the GNU Lesser General Public License.
+The concat record is released under the GNU Lesser General Public License 3.0.
+
+## <span style='color:#f00000'>Credits</span>
+
+Many parts of the concat record are based on or cribbed from other record types
+including, but not necessarily limited to:
+
+ * The original genSubRecord (Andy Foster) and the revised aSubRecord (Andrew Johnson),
+ * Output handlining from the calcout record (Ned Arnold), itself based
+   on recCalc.c (Julie Sander and Bob Dalesio), and
+ * device hadling based on devCalcoutSoft.c and devCalcoutSoftCallback.c (Marty Kraimer).
 
 ## <span style='color:#f00000'>Key Features</span>
 
@@ -237,18 +247,18 @@ stored in the field NE01, and so on.<br>
 | ---   | -----   | ---  | --- | ------- | ---  | ---   | --- | -- |
 | VAL   |  Value Field               |  See FTVL    | No  | 0 | Yes | Yes | Yes | Yes |
 | NORD  |  Number of Elements Read   |  ULONG       | No  | 0 | Yes | No  | No  | No  |
-| NIEM  |  No input error mode       |  MENU (<a href="#concatMODE">concatMODE</a>)  | Yes | Fail | Yes | No | No | No |
-| RIEM  |  Reduced input error mode  |  MENU (<a href="#concatMODE">concatMODE</a>)  | Yes | Skip | Yes | No | No | No |
-| DFNV  |  Default pad numeric value |  DOUBLE      | Yes | 0.0 | Yes | No | No | No |
-| DFSV  |  Dufault pad string value  |  STRING[40]  | Yes |     | Yes | No | No | No |
-| V00   |  Input Value 0             |  See FTVL    | No  |   | Yes | Yes/No | Yes | Yes |
-| V01   |  Input Value 1             |  See FTVL    | No  |   | Yes | Yes/No | Yes | Yes |
-| Vxx   |  Input Value xx            |  See FTVL    | No  |   | Yes | Yes/No | Yes | Yes |
-| V99   |  Input Value 99            |  See FTVL    | No  |   | Yes | Yes/No | Yes | Yes |
-| NE00  |  Number Elements 0         |  ULONG       | No  | 0 | Yes | Yes/No | Yes | Yes |
-| NE01  |  Number Elements 1         |  ULONG       | No  | 0 | Yes | Yes/No | Yes | Yes |
-| NExx  |  Number Elements xx        |  ULONG       | No  | 0 | Yes | Yes/No | Yes | Yes |
-| NE99  |  Number Elements 99        |  ULONG       | No  | 0 | Yes | Yes/No | Yes | Yes |
+| NIEM  |  No input error mode       |  MENU (<a href="#concatMODE">concatMODE</a>)  | Yes | Fail | Yes | No | No | Yes |
+| RIEM  |  Reduced input error mode  |  MENU (<a href="#concatMODE">concatMODE</a>)  | Yes | Skip | Yes | No | No | Yes |
+| DFNV  |  Default pad numeric value |  DOUBLE      | Yes | 0.0 | Yes | No | No | Yes |
+| DFSV  |  Dufault pad string value  |  STRING[40]  | Yes |     | Yes | No | No | Yes |
+| V00   |  Input Value 0             |  See FTVL    | No  |   | Yes | Yes | Yes | Yes |
+| V01   |  Input Value 1             |  See FTVL    | No  |   | Yes | Yes | Yes | Yes |
+| Vxx   |  Input Value xx            |  See FTVL    | No  |   | Yes | Yes | Yes | Yes |
+| V99   |  Input Value 99            |  See FTVL    | No  |   | Yes | Yes | Yes | Yes |
+| NE00  |  Number Elements 0         |  ULONG       | No  | 0 | Yes | No  | Yes | No  |
+| NE01  |  Number Elements 1         |  ULONG       | No  | 0 | Yes | No  | Yes | No  |
+| NExx  |  Number Elements xx        |  ULONG       | No  | 0 | Yes | No  | Yes | No  |
+| NE99  |  Number Elements 99        |  ULONG       | No  | 0 | Yes | No  | Yes | No  |
 
 
 ### <a name="concatMODE"></a><span style='color:#e00000'>Menu concatMODE</span>
@@ -329,6 +339,6 @@ as per the NIEM and RIEM fields
 
 4. Scan forward link if necessary, set PACT FALSE, and return.
 
-<font size="-1">Last updated: Sun Oct  5 13:03:36 2025</font>
+<font size="-1">Last updated: Thu Oct 16 13:50:16 2025</font>
 <br>
 

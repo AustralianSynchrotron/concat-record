@@ -47,5 +47,6 @@ O.*/
 *.kate-swp
 *.creator.user
 *.pro.user
+*.local
 
 # end
